@@ -1,0 +1,2882 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بُنيان لتشطيب الشاليهات | حاسبة التكلفة ومتابعة الشاليه مباشرة</title>
+
+    <!-- تحميل خط Cairo العربي من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- تحميل Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- إعدادات الألوان المعمارية الفخمة والخطوط -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        warmBg: '#FAF8F5',
+                        slateDark: '#1C2536',
+                        slateMid: '#2D3A50',
+                        bronze: '#B88B58',
+                        bronzeDark: '#9A6F3E',
+                        bronzeSoft: '#F6EFE6',
+                        warmBorder: '#E7E1D7'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- تنسيقات مخصصة لشريط التمرير والحلقة الدائرية -->
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FAF8F5;
+            color: #1C2536;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 9999px;
+            background: #E7E1D7;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #B88B58;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 2px 6px rgba(28, 37, 54, 0.25);
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #9A6F3E;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #B88B58;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 2px 6px rgba(28, 37, 54, 0.25);
+            cursor: pointer;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.55s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #D6CFC3;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-bronze/20 selection:text-slateDark">
+
+    <!-- ==================== شريط حالة الاتصال السحابي العلوي ==================== -->
+    <div class="bg-slateDark text-white/90 border-b border-white/10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+                <span id="topCloudPill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 font-bold">
+                    <span id="topCloudDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span id="topCloudText">جاري الاتصال بالسحابة (bunyan-chalet)...</span>
+                </span>
+            </div>
+            <div class="hidden sm:flex items-center gap-4 text-white/65 font-semibold">
+                <span>الساحل الشمالي • العين السخنة • مطروح</span>
+                <span class="text-bronze">|</span>
+                <span dir="ltr">0100 245 8890</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== شريط التنقل (Sticky Responsive Header) ==================== -->
+    <header class="sticky top-0 z-40 bg-warmBg/95 backdrop-blur-md border-b border-warmBorder">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-2">
+                <!-- الشعار -->
+                <a href="#hero" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+                    <div class="w-10 h-10 rounded-xl bg-slateDark text-bronze flex items-center justify-center shadow-sm group-hover:bg-slateMid transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 10h.01M15 10h.01" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block text-base sm:text-xl font-extrabold text-slateDark leading-none">بُنيان</span>
+                        <span class="block text-[11px] font-bold text-bronzeDark mt-0.5">لتشطيب الشاليهات</span>
+                    </div>
+                </a>
+
+                <!-- روابط سطح المكتب -->
+                <nav class="hidden lg:flex items-center gap-7 text-sm font-bold text-slateMid">
+                    <a href="#calculator" class="hover:text-bronzeDark transition">الباقات والأسعار</a>
+                    <a href="#tracker" class="hover:text-bronzeDark transition">متابعة شاليهك</a>
+                </nav>
+
+                <!-- أزرار حساب العميل + الإدارة + قائمة الموبايل -->
+                <div class="flex items-center gap-2">
+                    <!-- زر حساب العميل (غير مسجل) -->
+                    <button id="openClientAuthBtn" type="button" class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-slateDark hover:bg-slateMid rounded-xl transition shadow-sm">
+                        <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span class="hidden sm:inline">حساب العميل / دخول</span>
+                        <span class="sm:hidden">دخول</span>
+                    </button>
+
+                    <!-- شريط العميل بعد تسجيل الدخول -->
+                    <div id="clientLoggedInBar" class="hidden flex items-center gap-1.5 sm:gap-2">
+                        <button id="openClientPortalBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-extrabold text-slateDark bg-bronzeSoft hover:bg-bronze/25 border border-bronze/40 rounded-xl transition">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span id="headerClientName" class="max-w-[85px] sm:max-w-[130px] truncate">العميل</span>
+                            <span class="hidden sm:inline text-bronzeDark">• شاليهاتي</span>
+                        </button>
+                        <button id="clientLogoutBtn" type="button" title="خروج" class="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl border border-warmBorder bg-white hover:bg-red-50 hover:text-red-600 text-xs font-bold text-slateMid transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span class="hidden md:inline">خروج</span>
+                        </button>
+                    </div>
+
+                    <!-- زر لوحة الإدارة -->
+                    <button id="openAdminBtn" type="button" class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-slateDark bg-white hover:bg-bronzeSoft border border-warmBorder hover:border-bronze/50 rounded-xl transition shadow-sm">
+                        <svg class="w-4 h-4 text-bronzeDark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <span class="hidden sm:inline">لوحة الإدارة</span>
+                        <span class="sm:hidden">الإدارة</span>
+                    </button>
+
+                    <!-- زر قائمة الموبايل -->
+                    <button id="mobileMenuBtn" type="button" aria-label="فتح القائمة" class="lg:hidden p-2.5 rounded-xl border border-warmBorder bg-white text-slateDark hover:bg-bronzeSoft transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- قائمة الموبايل المنسدلة -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-warmBorder px-4 pt-2 pb-4 space-y-2 shadow-sm">
+            <a href="#calculator" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-bold text-slateDark hover:bg-warmBg">الباقات والأسعار</a>
+            <a href="#tracker" class="mobile-nav-link block px-3.5 py-2.5 rounded-xl text-sm font-bold text-slateDark hover:bg-warmBg">متابعة شاليهك</a>
+            <button id="mobileBookBtn" type="button" class="w-full mt-1 px-4 py-3 text-sm font-bold text-white bg-slateDark rounded-xl">
+                احجز معاينة مجانية
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==================== القسم 1: الواجهة الرئيسية وحاسبة تشطيب الشاليهات ==================== -->
+        <section id="hero" class="relative pt-10 pb-12 sm:pt-16 sm:pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-bronzeSoft border border-bronze/30 text-bronzeDark text-xs sm:text-sm font-bold mb-5">
+                        <span class="w-2 h-2 rounded-full bg-bronze"></span>
+                        متخصصون في تشطيب الشاليهات الساحلية على المفتاح
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-slateDark leading-tight tracking-tight">
+                        شطّب شاليهك بوضوح.. وتابع نسبة الإنجاز لحظة بلحظة
+                    </h1>
+
+                    <p class="mt-4 text-base sm:text-lg text-slateMid/80 leading-relaxed max-w-2xl mx-auto">
+                        اختر مساحة شاليهك (30 أو 60 أو 80 م²) وحدد باقة التشطيب المناسبة لمعرفة السعر الدقيق فوراً، وسجّل بحسابك لمتابعة مراحل تشطيب شاليهك مباشرة من أي جهاز.
+                    </p>
+
+                    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+                        <a href="#calculator" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-slateDark text-white font-bold text-base hover:bg-slateMid transition shadow-sm">
+                            <svg class="w-5 h-5 text-bronze" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            احسب تكلفة شاليهك
+                        </a>
+                        <a href="#tracker" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-slateDark font-bold text-base border border-warmBorder hover:border-bronze hover:bg-bronzeSoft/50 transition shadow-sm">
+                            <svg class="w-5 h-5 text-bronzeDark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            تابع نسبة تشطيب شاليهك
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- حاسبة تشطيب الشاليهات والباقات -->
+        <section id="calculator" class="py-12 sm:py-18 border-t border-warmBorder bg-white/80">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+                    <span class="text-xs font-bold text-bronzeDark bg-bronzeSoft px-3.5 py-1 rounded-full border border-bronze/25">الباقات والأسعار</span>
+                    <h2 class="mt-3 text-2xl sm:text-3xl font-extrabold text-slateDark">اختر مساحة شاليهك وباقة التشطيب</h2>
+                    <p class="mt-2 text-sm sm:text-base text-slateMid/80">أسعار محددة وواضحة لكل مساحة بدون مفاجآت، شاملة الخامات والمصنعيات والإشراف الهندسي.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- العمود الأيمن: اختيار المساحة + اختيار الباقة -->
+                    <div class="lg:col-span-7 space-y-7">
+                        <!-- الخطوة 1: مساحات الشاليهات الثلاثة -->
+                        <div class="space-y-3.5">
+                            <div class="flex items-center gap-2.5 px-1">
+                                <span class="w-6 h-6 rounded-full bg-slateDark text-bronze text-xs font-extrabold flex items-center justify-center">1</span>
+                                <h3 class="text-base font-extrabold text-slateDark">اختر مساحة الشاليه</h3>
+                            </div>
+                            <div id="chaletAreasContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                <!-- يتم توليد البطاقات الثلاث ديناميكياً -->
+                            </div>
+                        </div>
+
+                        <!-- الخطوة 2: بطاقات الباقات الثلاثة -->
+                        <div class="space-y-3.5">
+                            <div class="flex items-center gap-2.5 px-1">
+                                <span class="w-6 h-6 rounded-full bg-slateDark text-bronze text-xs font-extrabold flex items-center justify-center">2</span>
+                                <h3 class="text-base font-extrabold text-slateDark">اختر باقة التشطيب المناسبة</h3>
+                            </div>
+                            <div id="packagesContainer" class="grid grid-cols-1 gap-4">
+                                <!-- يتم توليد الباقات ديناميكياً -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- العمود الأيسر: ملخص التكلفة المباشر -->
+                    <div class="lg:col-span-5 lg:sticky lg:top-24">
+                        <div class="bg-slateDark text-white rounded-3xl p-6 sm:p-7 shadow-lg border border-slateMid">
+                            <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-4">
+                                <span class="text-sm font-semibold text-white/75">ملخص تكلفة الشاليه</span>
+                                <span id="summaryPackageBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-bronze/20 text-bronze">باقة سوبر لوكس</span>
+                            </div>
+
+                            <!-- السعر الدقيق -->
+                            <div class="py-6 border-b border-white/10">
+                                <div class="text-xs text-white/60 mb-1">التكلفة الإجمالية للباقة المختارة</div>
+                                <div class="flex items-baseline gap-2">
+                                    <span id="summaryTotalCost" class="text-3xl sm:text-4xl font-extrabold text-bronze tracking-tight">400,000</span>
+                                    <span class="text-base font-bold text-white/80">ج.م</span>
+                                </div>
+                                <p class="text-xs text-white/65 mt-2.5 bg-white/5 rounded-xl px-3 py-2 border border-white/10">
+                                    نطاق أسعار <span id="summaryRangeLabel" class="text-white font-bold">شاليه 60 م²</span>:
+                                    <span id="summaryPriceRange" class="text-bronze font-extrabold">من 350,000 إلى 450,000 ج.م</span>
+                                </p>
+                            </div>
+
+                            <!-- المساحة والمدة -->
+                            <div class="grid grid-cols-2 gap-3 py-5 border-b border-white/10">
+                                <div class="bg-white/5 rounded-xl p-3.5">
+                                    <div class="text-xs text-white/60">مساحة الشاليه</div>
+                                    <div class="text-lg font-bold text-white mt-0.5"><span id="summaryArea">60</span> م²</div>
+                                </div>
+                                <div class="bg-white/5 rounded-xl p-3.5">
+                                    <div class="text-xs text-white/60">مدة التسليم المتوقعة</div>
+                                    <div id="summaryDuration" class="text-base font-bold text-white mt-1">60 يوم</div>
+                                </div>
+                            </div>
+
+                            <!-- مواصفات الباقة -->
+                            <div class="py-5">
+                                <div class="text-sm font-bold text-white mb-3">بنود ومواصفات الباقة:</div>
+                                <ul id="summaryFeatures" class="space-y-2.5 text-sm text-white/85">
+                                    <!-- يتم التعبئة ديناميكياً -->
+                                </ul>
+                            </div>
+
+                            <!-- زر الحجز -->
+                            <button id="calcBookBtn" type="button" class="w-full mt-2 py-3.5 px-6 rounded-xl bg-bronze hover:bg-bronzeDark text-white font-extrabold text-base transition shadow-sm flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                احجز معاينة مجانية
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== القسم 2: متابعة نسبة تشطيب الشاليه المباشرة ==================== -->
+        <section id="tracker" class="py-16 sm:py-24 border-t border-warmBorder">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-warmBorder text-xs font-bold text-slateMid shadow-sm">
+                        <span id="trackerLiveDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span id="trackerLiveText">جاري مزامنة بيانات الشاليهات...</span>
+                    </div>
+                    <h2 class="mt-3 text-2xl sm:text-3xl font-extrabold text-slateDark">متابعة شاليهك لحظة بلحظة</h2>
+                    <p class="mt-2 text-sm sm:text-base text-slateMid/80">أدخل كود الشاليه الخاص بك للاطلاع على نسبة الإنجاز الإجمالية وتفاصيل المراحل الستة وآخر تحديثات الموقع.</p>
+                </div>
+
+                <!-- شريط شاليهات العميل المسجل -->
+                <div id="myLinkedChaletsBar" class="hidden max-w-3xl mx-auto mb-6 bg-bronzeSoft/80 border border-bronze/40 rounded-2xl p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slateDark">شاليهاتك المرتبطة بحسابك (<span id="myLinkedEmailLabel" dir="ltr"></span>):</span>
+                        </div>
+                        <button id="openPortalFromTrackerBtn" type="button" class="text-xs font-extrabold text-bronzeDark hover:underline">إدارة شاليهاتي</button>
+                    </div>
+                    <div id="myLinkedChaletsChips" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- شريط البحث والأكواد التجريبية -->
+                <div class="max-w-2xl mx-auto mb-10">
+                    <form id="unitSearchForm" class="flex flex-col sm:flex-row gap-3 bg-white p-2.5 rounded-2xl border border-warmBorder shadow-sm">
+                        <input
+                            type="text"
+                            id="unitCodeInput"
+                            placeholder="أدخل كود الشاليه (مثال: CH-101)"
+                            class="flex-1 h-12 px-4 rounded-xl bg-warmBg/80 border border-transparent focus:border-bronze focus:bg-white focus:outline-none text-slateDark font-bold placeholder:font-normal placeholder:text-slateMid/50 uppercase"
+                        >
+                        <button type="submit" class="h-12 px-7 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition shrink-0 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            عرض حالة الشاليه
+                        </button>
+                    </form>
+
+                    <!-- رسالة عدم العثور على الكود -->
+                    <div id="searchErrorMsg" class="hidden mt-3 text-center text-sm font-semibold text-red-700 bg-red-50 border border-red-200 rounded-xl py-2.5 px-4">
+                        عذراً، لم يتم العثور على شاليه بهذا الكود. تأكد من الكود أو اختر أحد الأكواد المتاحة بالأسفل.
+                    </div>
+
+                    <!-- أزرار الاختبار السريع -->
+                    <div class="mt-4">
+                        <p class="text-xs font-semibold text-slateMid/70 text-center mb-2.5">أكواد سريعة للتجربة والمتابعة:</p>
+                        <div id="demoChipsContainer" class="flex flex-wrap items-center justify-center gap-2.5">
+                            <!-- يتم توليد الأزرار ديناميكياً -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- حالة التحميل المؤقتة (بحد أقصى 6 ثوانٍ) -->
+                <div id="trackerLoading" class="bg-white border border-warmBorder rounded-3xl p-10 text-center shadow-sm">
+                    <div class="w-10 h-10 border-4 border-bronze/30 border-t-bronze rounded-full animate-spin mx-auto"></div>
+                    <p class="mt-4 text-sm font-bold text-slateMid">جاري تحميل بيانات الشاليهات من السحابة...</p>
+                </div>
+
+                <!-- رسالة بديلة واضحة في حال تعذر الاتصال أو انتهاء المهلة (6 ثوانٍ) -->
+                <div id="trackerErrorBox" class="hidden bg-white border border-amber-300 rounded-3xl p-8 text-center shadow-sm max-w-2xl mx-auto">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slateDark">تعذر الوصول لقاعدة البيانات حالياً</h3>
+                    <p id="trackerErrorDetails" class="text-xs sm:text-sm text-slateMid/80 mt-2 leading-relaxed">
+                        يرجى التأكد من اتصالك بالإنترنت ومن تفعيل Firestore في وضع الاختبار (Test Mode) داخل مشروع Firebase.
+                    </p>
+                    <button id="retryFirestoreBtn" type="button" class="mt-4 px-6 py-2.5 rounded-xl bg-slateDark hover:bg-slateMid text-white text-xs font-bold transition">
+                        إعادة المحاولة الآن
+                    </button>
+                </div>
+
+                <!-- لوحة عرض تفاصيل الشاليه -->
+                <div id="unitDashboard" class="hidden bg-white border border-warmBorder rounded-3xl p-5 sm:p-8 shadow-sm">
+                    <!-- رأس اللوحة -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-warmBorder">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <span id="dashUnitCode" class="px-3 py-1 rounded-lg bg-slateDark text-bronze text-xs font-extrabold tracking-wider">CH-101</span>
+                                <span id="dashOverallBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">جاري التنفيذ</span>
+                                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    تحديث مباشر
+                                </span>
+                            </div>
+                            <h3 class="mt-2.5 text-xl sm:text-2xl font-extrabold text-slateDark">
+                                المالك: <span id="dashOwnerName">—</span>
+                            </h3>
+                        </div>
+
+                        <div class="text-xs text-slateMid/80 bg-warmBg px-4 py-2.5 rounded-xl border border-warmBorder">
+                            <span class="block font-bold text-slateDark">القرية / المنتجع:</span>
+                            <span id="dashVillage" class="mt-0.5 block">—</span>
+                        </div>
+                    </div>
+
+                    <!-- بطاقات المعلومات السريعة -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 my-6">
+                        <div class="bg-warmBg/80 border border-warmBorder rounded-2xl p-4">
+                            <div class="text-xs text-slateMid/70">المساحة</div>
+                            <div id="dashArea" class="text-base font-extrabold text-slateDark mt-1">—</div>
+                        </div>
+                        <div class="bg-warmBg/80 border border-warmBorder rounded-2xl p-4">
+                            <div class="text-xs text-slateMid/70">باقة التشطيب</div>
+                            <div id="dashPackage" class="text-base font-extrabold text-slateDark mt-1">—</div>
+                        </div>
+                        <div class="bg-warmBg/80 border border-warmBorder rounded-2xl p-4">
+                            <div class="text-xs text-slateMid/70">المراحل المكتملة</div>
+                            <div id="dashCompletedStages" class="text-base font-extrabold text-slateDark mt-1">—</div>
+                        </div>
+                        <div class="bg-warmBg/80 border border-warmBorder rounded-2xl p-4">
+                            <div class="text-xs text-slateMid/70">آخر تحديث مسجل</div>
+                            <div id="dashLastUpdated" class="text-sm font-extrabold text-bronzeDark mt-1">—</div>
+                        </div>
+                    </div>
+
+                    <!-- الشبكة الرئيسية: النسبة الإجمالية + المراحل الستة + سجل التحديثات -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+                        <!-- العمود الأيمن: الحلقة الدائرية + سجل التحديثات -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <!-- الحلقة الدائرية SVG -->
+                            <div class="bg-warmBg/70 border border-warmBorder rounded-2xl p-6 text-center flex flex-col items-center">
+                                <h4 class="text-sm font-bold text-slateMid mb-4">نسبة الإنجاز الإجمالية</h4>
+                                <div class="relative w-48 h-48 flex items-center justify-center">
+                                    <svg class="w-full h-full" viewBox="0 0 180 180">
+                                        <circle cx="90" cy="90" r="76" fill="none" stroke="#E7E1D7" stroke-width="13" />
+                                        <circle
+                                            id="overallProgressCircle"
+                                            class="progress-ring-circle"
+                                            cx="90" cy="90" r="76"
+                                            fill="none"
+                                            stroke="#B88B58"
+                                            stroke-width="13"
+                                            stroke-linecap="round"
+                                            stroke-dasharray="477.52"
+                                            stroke-dashoffset="477.52"
+                                        />
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span id="overallPercentText" class="text-4xl font-extrabold text-slateDark leading-none">0%</span>
+                                        <span class="text-xs font-semibold text-slateMid/70 mt-1.5">مكتمل</span>
+                                    </div>
+                                </div>
+                                <p id="overallSummaryNote" class="mt-4 text-xs text-slateMid/80 leading-relaxed">
+                                    جاري متابعة التنفيذ وفق الجدول الهندسي.
+                                </p>
+                            </div>
+
+                            <!-- سجل تحديثات الموقع -->
+                            <div class="bg-white border border-warmBorder rounded-2xl p-5">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <svg class="w-5 h-5 text-bronzeDark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h4 class="text-sm font-extrabold text-slateDark">سجل تحديثات الموقع</h4>
+                                </div>
+                                <div id="siteUpdatesList" class="space-y-4">
+                                    <!-- يتم التوليد ديناميكياً -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- العمود الأيسر: المراحل الستة -->
+                        <div class="lg:col-span-8">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-base font-extrabold text-slateDark">مراحل التشطيب (6 مراحل)</h4>
+                                <span class="text-xs font-semibold text-slateMid/70">يُحسب الإجمالي كمتوسط للمراحل</span>
+                            </div>
+
+                            <div id="stagesList" class="space-y-3.5">
+                                <!-- يتم توليد المراحل الستة ديناميكياً -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== التذييل (Footer) ==================== -->
+    <footer class="bg-slateDark text-white/80 border-t border-slateMid">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-white/10 text-bronze flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block text-lg font-extrabold text-white leading-none">بُنيان لتشطيب الشاليهات</span>
+                            <span class="block text-xs text-bronze mt-0.5">تشطيب ساحلي متكامل</span>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-sm text-white/65 leading-relaxed max-w-xs">
+                        نقدم حلول تشطيب وديكور متكاملة للشاليهات بمساحات 30 و 60 و 80 م² بخامات مقاومة للرطوبة ومتابعة إلكترونية حية.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-3">روابط سريعة</h4>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li><a href="#calculator" class="hover:text-bronze transition">الباقات والأسعار</a></li>
+                        <li><a href="#tracker" class="hover:text-bronze transition">متابعة شاليهك</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-3">تواصل معنا</h4>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center gap-2"><span class="text-bronze">الهاتف:</span><span dir="ltr">0100 245 8890</span></li>
+                        <li class="flex items-center gap-2"><span class="text-bronze">البريد:</span><span>info@bunyan-chalets.eg</span></li>
+                        <li class="flex items-center gap-2"><span class="text-bronze">النطاق:</span><span>الساحل الشمالي • العين السخنة • مطروح</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-white/10 text-center text-xs text-white/50">
+                © 2026 بُنيان لتشطيب الشاليهات والديكور. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== القسم 3: نافذة حساب العميل (Firebase Auth) ==================== -->
+    <div id="clientAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slateDark/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-warmBorder relative max-h-[92vh] overflow-y-auto custom-scroll">
+            <button id="closeClientAuthBtn" type="button" aria-label="إغلاق" class="absolute top-5 left-5 p-2 rounded-xl text-slateMid hover:bg-warmBg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="w-11 h-11 rounded-2xl bg-slateDark text-bronze flex items-center justify-center mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-extrabold text-slateDark">حساب العميل</h3>
+            <p class="text-xs text-slateMid/75 mt-1">سجّل دخولك أو أنشئ حساباً جديداً لإضافة شاليهك ومتابعة التشطيب من أي جهاز.</p>
+
+            <!-- تبويبات دخول / إنشاء حساب -->
+            <div class="grid grid-cols-2 gap-2 bg-warmBg p-1 rounded-xl border border-warmBorder mt-5 mb-5">
+                <button id="authTabLoginBtn" type="button" class="py-2.5 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition">تسجيل دخول</button>
+                <button id="authTabRegisterBtn" type="button" class="py-2.5 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition">إنشاء حساب جديد</button>
+            </div>
+
+            <div id="clientAuthError" class="hidden mb-4 text-xs font-bold text-red-700 bg-red-50 border border-red-200 rounded-xl py-2.5 px-3 text-center"></div>
+
+            <!-- نموذج تسجيل الدخول -->
+            <form id="clientLoginForm" class="space-y-4">
+                <div>
+                    <label for="loginEmail" class="block text-xs font-bold text-slateDark mb-1.5">البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" required dir="ltr" placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                </div>
+                <div>
+                    <label for="loginPassword" class="block text-xs font-bold text-slateDark mb-1.5">كلمة المرور</label>
+                    <input type="password" id="loginPassword" required dir="ltr" placeholder="••••••" class="w-full px-4 py-3 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                </div>
+                <button id="clientLoginSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition shadow-sm">
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <!-- نموذج إنشاء حساب جديد -->
+            <form id="clientRegisterForm" class="hidden space-y-3.5">
+                <div>
+                    <label for="regName" class="block text-xs font-bold text-slateDark mb-1.5">الاسم الكامل *</label>
+                    <input type="text" id="regName" required placeholder="مثال: م. كريم عادل" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark">
+                </div>
+                <div>
+                    <label for="regEmail" class="block text-xs font-bold text-slateDark mb-1.5">البريد الإلكتروني *</label>
+                    <input type="email" id="regEmail" required dir="ltr" placeholder="name@example.com" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                </div>
+                <div>
+                    <label for="regPassword" class="block text-xs font-bold text-slateDark mb-1.5">كلمة المرور (6 أحرف فأكثر) *</label>
+                    <input type="password" id="regPassword" required minlength="6" dir="ltr" placeholder="••••••" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                </div>
+                <button id="clientRegisterSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl bg-bronze hover:bg-bronzeDark text-white font-extrabold text-sm transition shadow-sm">
+                    إنشاء الحساب والدخول فوراً
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== لوحة العميل (شاليهاتي) ==================== -->
+    <div id="clientPortalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-5 bg-slateDark/70 backdrop-blur-sm">
+        <div class="bg-warmBg rounded-3xl max-w-4xl w-full max-h-[92vh] shadow-2xl border border-warmBorder flex flex-col overflow-hidden">
+            <div class="bg-slateDark text-white px-5 sm:px-7 py-4 flex items-center justify-between gap-3 shrink-0">
+                <div>
+                    <h3 class="text-base sm:text-lg font-extrabold">أهلاً بك، <span id="portalClientName" class="text-bronze">—</span></h3>
+                    <p id="portalClientEmail" class="text-xs text-white/65" dir="ltr">—</p>
+                </div>
+                <button id="closeClientPortalBtn" type="button" aria-label="إغلاق" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scroll p-4 sm:p-6 space-y-6">
+                <div class="bg-white border border-warmBorder rounded-2xl p-5 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h4 class="text-base font-extrabold text-slateDark">شاليهاتي المسجلة</h4>
+                            <p class="text-xs text-slateMid/75">أضف شاليهك أو عدّل بياناته وسيتزامن فوراً مع السحابة ولوحة الإدارة.</p>
+                        </div>
+                        <button id="toggleClientAddChaletBtn" type="button" class="px-4 py-2.5 rounded-xl bg-slateDark hover:bg-slateMid text-white text-xs font-bold transition">
+                            + إضافة شاليه جديد
+                        </button>
+                    </div>
+
+                    <!-- نموذج إضافة أو تعديل شاليه للعميل -->
+                    <form id="clientChaletForm" class="hidden mb-5 p-4 rounded-2xl bg-warmBg border border-bronze/40 space-y-3.5">
+                        <div class="flex items-center justify-between">
+                            <span id="clientChaletFormTitle" class="text-xs font-extrabold text-bronzeDark">إضافة شاليه جديد لحسابك</span>
+                            <button id="cancelClientChaletFormBtn" type="button" class="text-xs font-bold text-slateMid hover:text-slateDark">إلغاء</button>
+                        </div>
+                        <input type="hidden" id="clientEditModeCode">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="clientChaletCode" class="block text-xs font-bold text-slateDark mb-1">كود الشاليه *</label>
+                                <input type="text" id="clientChaletCode" required placeholder="مثال: CH-505" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs font-extrabold uppercase">
+                            </div>
+                            <div>
+                                <label for="clientChaletOwnerName" class="block text-xs font-bold text-slateDark mb-1">اسم المالك *</label>
+                                <input type="text" id="clientChaletOwnerName" required placeholder="مثال: م. كريم عادل" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs font-semibold">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label for="clientChaletVillage" class="block text-xs font-bold text-slateDark mb-1">اسم القرية / المنتجع *</label>
+                                <input type="text" id="clientChaletVillage" required placeholder="مثال: الساحل - مراسي" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs font-semibold">
+                            </div>
+                            <div>
+                                <label for="clientChaletArea" class="block text-xs font-bold text-slateDark mb-1">المساحة *</label>
+                                <select id="clientChaletArea" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs font-bold">
+                                    <option value="30">شاليه 30 م²</option>
+                                    <option value="60" selected>شاليه 60 م²</option>
+                                    <option value="80">شاليه 80 م²</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="clientChaletPackage" class="block text-xs font-bold text-slateDark mb-1">باقة التشطيب *</label>
+                                <select id="clientChaletPackage" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs font-bold">
+                                    <option value="الباقة الاقتصادية">الباقة الاقتصادية</option>
+                                    <option value="باقة سوبر لوكس" selected>باقة سوبر لوكس</option>
+                                    <option value="باقة VIP الفاخرة">باقة VIP الفاخرة</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="clientChaletNotes" class="block text-xs font-bold text-slateDark mb-1">ملاحظات إضافية (اختياري)</label>
+                            <textarea id="clientChaletNotes" rows="2" placeholder="أي تفاصيل أو طلبات خاصة بالشاليه" class="w-full px-3.5 py-2 rounded-xl bg-white border border-warmBorder focus:border-bronze focus:outline-none text-xs resize-none"></textarea>
+                        </div>
+
+                        <button id="clientSaveChaletBtn" type="submit" class="px-6 py-2.5 rounded-xl bg-bronze hover:bg-bronzeDark text-white font-extrabold text-xs transition shadow-sm">
+                            حفظ بيانات الشاليه على السحابة
+                        </button>
+                    </form>
+
+                    <div id="portalChaletsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <!-- يتم التعبئة ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== نافذة حجز معاينة مجانية ==================== -->
+    <div id="bookingModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slateDark/65 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-warmBorder relative max-h-[92vh] overflow-y-auto custom-scroll">
+            <button id="closeBookingModalBtn" type="button" aria-label="إغلاق" class="absolute top-5 left-5 p-2 rounded-xl text-slateMid hover:bg-warmBg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div id="bookingFormContainer">
+                <span class="inline-block text-xs font-bold text-bronzeDark bg-bronzeSoft px-3 py-1 rounded-full mb-2">معاينة هندسية مجانية</span>
+                <h3 class="text-xl font-extrabold text-slateDark">احجز معاينة لشاليهك</h3>
+                <p class="text-xs text-slateMid/75 mt-1 mb-5">سيتواصل معك مهندس المعاينات لتأكيد الموعد وتفاصيل الباقة والسعر المختار.</p>
+
+                <form id="bookingForm" class="space-y-3.5">
+                    <div>
+                        <label for="bookingName" class="block text-xs font-bold text-slateDark mb-1">اسم العميل *</label>
+                        <input type="text" id="bookingName" required placeholder="مثال: محمد أحمد علي" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="bookingPhone" class="block text-xs font-bold text-slateDark mb-1">رقم الهاتف *</label>
+                            <input type="tel" id="bookingPhone" required placeholder="01xxxxxxxxx" dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                        </div>
+                        <div>
+                            <label for="bookingEmail" class="block text-xs font-bold text-slateDark mb-1">البريد الإلكتروني (اختياري)</label>
+                            <input type="email" id="bookingEmail" dir="ltr" placeholder="name@example.com" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-semibold text-slateDark text-right">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="bookingAreaSelect" class="block text-xs font-bold text-slateDark mb-1">مساحة الشاليه *</label>
+                            <select id="bookingAreaSelect" class="w-full px-3 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-extrabold text-slateDark">
+                                <option value="30">شاليه 30 م²</option>
+                                <option value="60">شاليه 60 م²</option>
+                                <option value="80">شاليه 80 م²</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="bookingPackageSelect" class="block text-xs font-bold text-slateDark mb-1">الباقة المختارة</label>
+                            <select id="bookingPackageSelect" class="w-full px-3 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-bold text-slateDark">
+                                <option value="standard">الباقة الاقتصادية</option>
+                                <option value="superlux">باقة سوبر لوكس</option>
+                                <option value="vip">باقة VIP الفاخرة</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-bronzeSoft/80 border border-bronze/30 rounded-xl px-4 py-2.5">
+                        <span class="text-xs font-bold text-slateMid">السعر المحدد للباقة:</span>
+                        <span id="bookingCalculatedPrice" class="text-sm font-extrabold text-bronzeDark">400,000 ج.م</span>
+                    </div>
+
+                    <div>
+                        <label for="bookingVillage" class="block text-xs font-bold text-slateDark mb-1">اسم القرية / المنتجع *</label>
+                        <input type="text" id="bookingVillage" required placeholder="مثال: الساحل الشمالي - مراسي / العين السخنة" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm text-slateDark">
+                    </div>
+
+                    <div>
+                        <label for="bookingNotes" class="block text-xs font-bold text-slateDark mb-1">ملاحظات إضافية (اختياري)</label>
+                        <textarea id="bookingNotes" rows="2" placeholder="مثال: أرغب بالتسليم قبل موسم الصيف" class="w-full px-4 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm text-slateDark resize-none"></textarea>
+                    </div>
+
+                    <button id="bookingSubmitBtn" type="submit" class="w-full mt-2 py-3.5 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition shadow-sm">
+                        تأكيد إرسال طلب المعاينة
+                    </button>
+                </form>
+            </div>
+
+            <!-- رسالة نجاح الحجز -->
+            <div id="bookingSuccessContainer" class="hidden text-center py-6">
+                <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-extrabold text-slateDark">تم إرسال طلبك بنجاح!</h3>
+                <p class="text-sm text-slateMid/80 mt-2 leading-relaxed">
+                    شكراً لك يا <span id="confirmedClientName" class="font-bold text-slateDark"></span>. تم حفظ طلبك في قاعدة البيانات وسيتواصل معك فريق بُنيان قريباً.
+                </p>
+                <button id="closeBookingSuccessBtn" type="button" class="mt-6 px-8 py-3 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition">
+                    حسناً، إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== القسم 4: لوحة تحكم الإدارة (Admin Management Panel) ==================== -->
+    <div id="adminOverlay" class="hidden fixed inset-0 z-50 bg-slateDark/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-5">
+        <!-- 1. شاشة تسجيل دخول الإدارة -->
+        <div id="adminLoginCard" class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-warmBorder relative">
+            <button id="closeAdminLoginBtn" type="button" aria-label="إغلاق" class="absolute top-5 left-5 p-2 rounded-xl text-slateMid hover:bg-warmBg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="w-12 h-12 rounded-2xl bg-slateDark text-bronze flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-extrabold text-slateDark">لوحة الإدارة</h3>
+            <p class="text-xs text-slateMid/75 mt-1">سجّل الدخول بالرمز السريع أو بالإيميل وكلمة المرور لإدارة الشاليهات والطلبات.</p>
+
+            <div class="grid grid-cols-2 gap-2 bg-warmBg p-1 rounded-xl border border-warmBorder mt-4 mb-4">
+                <button id="adminModePinBtn" type="button" class="py-2 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition">رمز الدخول السريع</button>
+                <button id="adminModeEmailBtn" type="button" class="py-2 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition">إيميل وكلمة مرور</button>
+            </div>
+
+            <form id="adminLoginForm" class="space-y-4">
+                <div id="adminPinGroup">
+                    <label for="adminPasscodeInput" class="block text-xs font-bold text-slateDark mb-1.5">رمز الدخول (PIN)</label>
+                    <input
+                        type="password"
+                        id="adminPasscodeInput"
+                        placeholder="1234"
+                        dir="ltr"
+                        class="w-full px-4 py-3 text-center tracking-[0.4em] text-lg font-extrabold rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-slateDark"
+                    >
+                </div>
+
+                <div id="adminEmailGroup" class="hidden space-y-3">
+                    <div>
+                        <label for="adminEmailInput" class="block text-xs font-bold text-slateDark mb-1">البريد الإلكتروني للإدارة</label>
+                        <input type="email" id="adminEmailInput" dir="ltr" placeholder="admin@bunyan.com" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                    </div>
+                    <div>
+                        <label for="adminPasswordInput" class="block text-xs font-bold text-slateDark mb-1">كلمة المرور</label>
+                        <input type="password" id="adminPasswordInput" dir="ltr" placeholder="••••••" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                    </div>
+                </div>
+
+                <div id="adminLoginError" class="hidden text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-xl py-2 px-3 text-center">
+                    بيانات الدخول غير صحيحة، حاول مرة أخرى.
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition">
+                    دخول للوحة التحكم
+                </button>
+
+                <div class="text-[11px] text-center text-slateMid/80 bg-bronzeSoft/80 border border-bronze/25 rounded-xl py-2.5 px-3 space-y-1">
+                    <div>الرمز السريع: <strong class="text-slateDark font-extrabold">1234</strong></div>
+                    <div>أو الإيميل: <strong dir="ltr" class="text-slateDark">admin@bunyan.com</strong> / كلمة المرور: <strong class="text-slateDark">123456</strong></div>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2. واجهة لوحة التحكم الرئيسية (3 تبويبات) -->
+        <div id="adminDashboardPanel" class="hidden bg-warmBg rounded-3xl max-w-6xl w-full h-[92vh] shadow-2xl border border-warmBorder flex flex-col overflow-hidden">
+            <!-- شريط علوي -->
+            <div class="bg-slateDark text-white px-5 sm:px-7 py-4 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-white/10 text-bronze flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-extrabold leading-none">لوحة إدارة بُنيان</h3>
+                        <span class="text-[11px] text-white/65">إدارة مباشرة عبر Firebase Firestore (bunyan-chalet)</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="adminLogoutBtn" type="button" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-red-500/20 text-xs font-bold text-white/90 hover:text-red-200 transition">
+                        تسجيل الخروج
+                    </button>
+                    <button id="closeAdminPanelBtn" type="button" aria-label="إغلاق" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- التبويبات الثلاثة -->
+            <div class="bg-white border-b border-warmBorder px-4 sm:px-7 pt-3 flex items-center gap-4 sm:gap-6 overflow-x-auto shrink-0">
+                <button id="tabUnitsBtn" type="button" class="pb-3 px-1 text-xs sm:text-sm font-extrabold border-b-2 border-bronze text-slateDark flex items-center gap-2 whitespace-nowrap transition">
+                    <span>إدارة الشاليهات</span>
+                    <span id="adminUnitsCount" class="px-2 py-0.5 text-[11px] rounded-full bg-bronzeSoft text-bronzeDark">0</span>
+                </button>
+                <button id="tabInquiriesBtn" type="button" class="pb-3 px-1 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slateMid/70 hover:text-slateDark flex items-center gap-2 whitespace-nowrap transition">
+                    <span>طلبات المعاينة</span>
+                    <span id="adminInquiriesCount" class="px-2 py-0.5 text-[11px] rounded-full bg-warmBg text-slateMid">0</span>
+                </button>
+                <button id="tabCloudBtn" type="button" class="pb-3 px-1 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slateMid/70 hover:text-slateDark flex items-center gap-2 whitespace-nowrap transition">
+                    <span>حالة السحابة</span>
+                    <span id="adminCloudTabDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                </button>
+            </div>
+
+            <!-- التبويب 1: إدارة الشاليهات -->
+            <div id="adminTabUnits" class="flex-1 overflow-y-auto custom-scroll p-4 sm:p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- القائمة الجانبية للشاليهات -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <button id="showAddUnitFormBtn" type="button" class="w-full py-3 px-4 rounded-2xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                            <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                            + إضافة شاليه جديد
+                        </button>
+
+                        <div class="bg-white border border-warmBorder rounded-2xl p-3 space-y-2">
+                            <div class="text-xs font-bold text-slateMid/70 px-2 py-1">جميع الشاليهات المسجلة</div>
+                            <div id="adminUnitsList" class="space-y-2 max-h-[55vh] overflow-y-auto custom-scroll"></div>
+                        </div>
+                    </div>
+
+                    <!-- منطقة الإضافة أو التحرير -->
+                    <div class="lg:col-span-8">
+                        <!-- نموذج إضافة شاليه جديد -->
+                        <div id="adminAddUnitCard" class="hidden bg-white border border-warmBorder rounded-2xl p-5 sm:p-6 shadow-sm">
+                            <div class="flex items-center justify-between pb-4 border-b border-warmBorder mb-5">
+                                <h4 class="text-lg font-extrabold text-slateDark">إضافة شاليه جديد</h4>
+                                <button id="cancelAddUnitBtn" type="button" class="text-xs font-bold text-slateMid hover:text-slateDark">إلغاء</button>
+                            </div>
+
+                            <form id="addUnitForm" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="newUnitCode" class="block text-xs font-bold text-slateDark mb-1.5">كود الشاليه *</label>
+                                        <input type="text" id="newUnitCode" required placeholder="CH-405" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-extrabold uppercase text-slateDark">
+                                    </div>
+                                    <div>
+                                        <label for="newUnitOwner" class="block text-xs font-bold text-slateDark mb-1.5">اسم المالك *</label>
+                                        <input type="text" id="newUnitOwner" required placeholder="مثال: أ. طارق منصور" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="newUnitEmail" class="block text-xs font-bold text-slateDark mb-1.5">إيميل المالك (لربطه بحسابه)</label>
+                                        <input type="email" id="newUnitEmail" dir="ltr" placeholder="client@example.com" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark text-right">
+                                    </div>
+                                    <div>
+                                        <label for="newUnitVillage" class="block text-xs font-bold text-slateDark mb-1.5">اسم القرية / المنتجع *</label>
+                                        <input type="text" id="newUnitVillage" required placeholder="مثال: الساحل الشمالي - لافيستا" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-semibold text-slateDark">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="newUnitArea" class="block text-xs font-bold text-slateDark mb-1.5">مساحة الشاليه *</label>
+                                        <select id="newUnitArea" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-bold text-slateDark">
+                                            <option value="30">شاليه 30 م²</option>
+                                            <option value="60" selected>شاليه 60 م²</option>
+                                            <option value="80">شاليه 80 م²</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="newUnitPackage" class="block text-xs font-bold text-slateDark mb-1.5">باقة التشطيب *</label>
+                                        <select id="newUnitPackage" class="w-full px-4 py-2.5 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm font-bold text-slateDark">
+                                            <option value="الباقة الاقتصادية">الباقة الاقتصادية</option>
+                                            <option value="باقة سوبر لوكس" selected>باقة سوبر لوكس</option>
+                                            <option value="باقة VIP الفاخرة">باقة VIP الفاخرة</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button id="submitNewUnitBtn" type="submit" class="w-full py-3 rounded-xl bg-bronze hover:bg-bronzeDark text-white font-extrabold text-sm transition shadow-sm">
+                                    إنشاء الشاليه وحفظه في السحابة
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- محرر الشاليه المختار -->
+                        <div id="adminEditUnitCard" class="hidden bg-white border border-warmBorder rounded-2xl p-5 sm:p-6 shadow-sm">
+                            <div class="flex flex-wrap items-start justify-between gap-3 pb-4 border-b border-warmBorder mb-5">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span id="editUnitCodeBadge" class="px-2.5 py-0.5 rounded-lg bg-slateDark text-bronze text-xs font-extrabold">CH-101</span>
+                                        <span id="editUnitOverallBadge" class="px-2.5 py-0.5 rounded-full bg-bronzeSoft text-bronzeDark text-xs font-extrabold">0% مكتمل</span>
+                                    </div>
+                                    <h4 id="editUnitOwnerTitle" class="text-lg font-extrabold text-slateDark mt-1.5">—</h4>
+                                </div>
+
+                                <button id="deleteSelectedUnitBtn" type="button" class="px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold transition flex items-center gap-1.5">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    حذف الشاليه
+                                </button>
+                            </div>
+
+                            <!-- تعديل البيانات الأساسية للشاليه -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5">
+                                <div>
+                                    <label for="editUnitOwnerInput" class="block text-xs font-bold text-slateDark mb-1">اسم المالك</label>
+                                    <input type="text" id="editUnitOwnerInput" class="w-full px-3.5 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-semibold text-slateDark">
+                                </div>
+                                <div>
+                                    <label for="editUnitEmailInput" class="block text-xs font-bold text-slateDark mb-1">إيميل المالك</label>
+                                    <input type="email" id="editUnitEmailInput" dir="ltr" placeholder="client@example.com" class="w-full px-3.5 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-semibold text-slateDark text-right">
+                                </div>
+                                <div>
+                                    <label for="editUnitVillageInput" class="block text-xs font-bold text-slateDark mb-1">اسم القرية / المنتجع</label>
+                                    <input type="text" id="editUnitVillageInput" class="w-full px-3.5 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-semibold text-slateDark">
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label for="editUnitAreaSelect" class="block text-xs font-bold text-slateDark mb-1">المساحة</label>
+                                        <select id="editUnitAreaSelect" class="w-full px-3 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-bold text-slateDark">
+                                            <option value="30">30 م²</option>
+                                            <option value="60">60 م²</option>
+                                            <option value="80">80 م²</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="editUnitPackageSelect" class="block text-xs font-bold text-slateDark mb-1">الباقة</label>
+                                        <select id="editUnitPackageSelect" class="w-full px-3 py-2 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-xs font-bold text-slateDark">
+                                            <option value="الباقة الاقتصادية">الاقتصادية</option>
+                                            <option value="باقة سوبر لوكس">سوبر لوكس</option>
+                                            <option value="باقة VIP الفاخرة">VIP الفاخرة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- أشرطة تعديل المراحل الستة -->
+                            <div class="space-y-3.5">
+                                <div class="text-sm font-extrabold text-slateDark">تعديل نسب مراحل التشطيب (0% - 100%)</div>
+                                <div id="adminStageSliders" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+                            </div>
+
+                            <!-- إضافة ملاحظة جديدة لسجل التحديثات -->
+                            <div class="mt-6 pt-5 border-t border-warmBorder">
+                                <label for="adminNewUpdateNote" class="block text-xs font-extrabold text-slateDark mb-2">إضافة ملاحظة جديدة لسجل تحديثات الموقع (اختياري)</label>
+                                <input
+                                    type="text"
+                                    id="adminNewUpdateNote"
+                                    placeholder="مثال: تم الانتهاء من تركيب السيراميك والبورسلين بالكامل"
+                                    class="w-full px-4 py-3 rounded-xl bg-warmBg border border-warmBorder focus:border-bronze focus:bg-white focus:outline-none text-sm text-slateDark"
+                                >
+                            </div>
+
+                            <div class="mt-5 flex flex-wrap items-center justify-end gap-3">
+                                <button id="saveUnitChangesBtn" type="button" class="w-full sm:w-auto px-7 py-3 rounded-xl bg-slateDark hover:bg-slateMid text-white font-bold text-sm transition shadow-sm flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-bronze" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>حفظ التعديلات</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- رسالة فارغة -->
+                        <div id="adminEmptySelection" class="bg-white border border-warmBorder rounded-2xl p-10 text-center text-slateMid/70">
+                            <p class="text-sm font-bold">اختر شاليه من القائمة الجانبية لتعديل بياناته ومراحل التشطيب، أو اضغط على "+ إضافة شاليه جديد".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التبويب 2: طلبات المعاينة -->
+            <div id="adminTabInquiries" class="hidden flex-1 overflow-y-auto custom-scroll p-4 sm:p-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <h4 class="text-base font-extrabold text-slateDark">طلبات المعاينة الواردة من الحاسبة</h4>
+                        <span class="text-xs text-slateMid/70">يمكنك تحويل أي طلب مباشرة إلى شاليه قيد التشطيب بضغطة زر</span>
+                    </div>
+                    <div id="adminInquiriesList" class="space-y-3.5"></div>
+                </div>
+            </div>
+
+            <!-- التبويب 3: حالة السحابة -->
+            <div id="adminTabCloud" class="hidden flex-1 overflow-y-auto custom-scroll p-4 sm:p-6">
+                <div class="max-w-3xl mx-auto space-y-5">
+                    <div class="bg-white border border-warmBorder rounded-2xl p-6 shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-warmBorder">
+                            <div class="flex items-center gap-3">
+                                <span id="cloudPanelDot" class="w-3.5 h-3.5 rounded-full bg-amber-400"></span>
+                                <div>
+                                    <h4 id="cloudPanelTitle" class="text-lg font-extrabold text-slateDark">حالة الاتصال بـ Firebase</h4>
+                                    <p class="text-xs text-slateMid/75 mt-0.5">معرّف المشروع: <strong dir="ltr" class="text-slateDark">bunyan-chalet</strong></p>
+                                </div>
+                            </div>
+                            <span id="cloudPanelBadge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-700 border border-amber-200">جاري الفحص</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+                            <div class="bg-warmBg border border-warmBorder rounded-2xl p-4">
+                                <div class="text-xs text-slateMid/70">المشروع السحابي</div>
+                                <div dir="ltr" class="text-base font-extrabold text-slateDark mt-1 text-right">bunyan-chalet</div>
+                            </div>
+                            <div class="bg-warmBg border border-warmBorder rounded-2xl p-4">
+                                <div class="text-xs text-slateMid/70">إجمالي الشاليهات</div>
+                                <div id="cloudTotalChalets" class="text-2xl font-extrabold text-bronzeDark mt-1">0</div>
+                            </div>
+                            <div class="bg-warmBg border border-warmBorder rounded-2xl p-4">
+                                <div class="text-xs text-slateMid/70">إجمالي طلبات المعاينة</div>
+                                <div id="cloudTotalRequests" class="text-2xl font-extrabold text-slateDark mt-1">0</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-5 border-t border-warmBorder flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-xs text-slateMid/80">في حال حذف جميع الشاليهات التجريبية يمكنك إعادة إضافتها في أي وقت:</p>
+                            <button id="reseedDemoBtn" type="button" class="px-5 py-2.5 rounded-xl bg-bronze hover:bg-bronzeDark text-white text-xs font-extrabold transition shadow-sm">
+                                إعادة إضافة الشاليهات التجريبية (CH-101, CH-204, CH-309)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== نافذة تأكيد الحذف المخصصة ==================== -->
+    <div id="confirmModal" class="hidden fixed inset-0 z-[65] bg-slateDark/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-warmBorder text-center">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 border border-red-200 flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h4 id="confirmTitle" class="text-base font-extrabold text-slateDark">تأكيد الحذف</h4>
+            <p id="confirmMessage" class="text-xs text-slateMid/80 mt-2 leading-relaxed">هل أنت متأكد من إتمام هذا الإجراء؟</p>
+            <div class="mt-5 flex items-center justify-center gap-3">
+                <button id="confirmCancelBtn" type="button" class="flex-1 py-2.5 rounded-xl bg-warmBg hover:bg-warmBorder text-slateDark font-bold text-xs transition">إلغاء</button>
+                <button id="confirmOkBtn" type="button" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition">نعم، حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== إشعار منبثق (Toast Notification) ==================== -->
+    <div id="toast" class="hidden fixed bottom-5 left-5 right-5 sm:left-6 sm:right-auto z-[70] max-w-sm bg-slateDark text-white px-4 py-3.5 rounded-2xl shadow-xl border border-slateMid flex items-center gap-3 text-sm font-bold">
+        <span id="toastDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+        <span id="toastText">تم الحفظ بنجاح</span>
+    </div>
+
+    <!-- ==================== منطق التطبيق + Firebase SDK v10.12.2 ==================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            updateProfile,
+            signOut,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            setDoc,
+            addDoc,
+            updateDoc,
+            deleteDoc,
+            getDocs,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        /* =========================================================================
+           1. إعدادات Firebase الحقيقية الخاصة بمشروع bunyan-chalet
+           ========================================================================= */
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVmBtk6NOvJHdr3hwxRB4ByTWijzPRvPE",
+            authDomain: "bunyan-chalet.firebaseapp.com",
+            projectId: "bunyan-chalet",
+            storageBucket: "bunyan-chalet.firebasestorage.app",
+            messagingSenderId: "960215886511",
+            appId: "1:960215886511:web:d86170f5ca503f86b2825a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const chaletsCol = collection(db, "chalets");
+        const requestsCol = collection(db, "inspection_requests");
+
+        /* =========================================================================
+           2. الثوابت وبيانات الشاليهات والباقات والمراحل الستة
+           ========================================================================= */
+        const ADMIN_CREDENTIALS = {
+            pin: '1234',
+            email: 'admin@bunyan.com',
+            password: '123456'
+        };
+
+        const STAGE_NAMES = [
+            'تأسيس الكهرباء',
+            'تأسيس السباكة',
+            'المحارة والجبس بورد',
+            'السيراميك والبورسلين',
+            'الدهانات والديكورات',
+            'التشطيب النهائي والتسليم'
+        ];
+
+        const CHALET_AREAS = [
+            {
+                area: 30,
+                title: 'شاليه 30 م²',
+                subtitle: 'استوديو / غرفة وصالة',
+                minPrice: 250000,
+                maxPrice: 340000,
+                deliveryDays: '45 يوم'
+            },
+            {
+                area: 60,
+                title: 'شاليه 60 م²',
+                subtitle: 'غرفتين وريسبشن ومطبخ',
+                minPrice: 350000,
+                maxPrice: 450000,
+                deliveryDays: '60 يوم'
+            },
+            {
+                area: 80,
+                title: 'شاليه 80 م²',
+                subtitle: 'غرفتين أو ثلاث وتراس واسع',
+                minPrice: 500000,
+                maxPrice: 650000,
+                deliveryDays: '75 يوم'
+            }
+        ];
+
+        const PACKAGES = [
+            {
+                id: 'standard',
+                name: 'الباقة الاقتصادية',
+                badge: 'عملية واقتصادية',
+                pricesByArea: { 30: 250000, 60: 350000, 80: 500000 },
+                description: 'تشطيب عملي متكامل مناسب للشاليهات الساحلية بخامات معتمدة وعزل أساسي.',
+                features: [
+                    'تأسيس كهرباء وسباكة بأسلاك ومواسير معتمدة',
+                    'عزل رطوبة أساسي للحمام والمطبخ ضد الملوحة',
+                    'أرضيات سيراميك فرز أول للغرف والحمام والمطبخ',
+                    'دهانات بلاستيك قابلة للغسيل ومقاومة للرطوبة',
+                    'أبواب غرف جاهزة وإضاءة أساسية وتقفيل كهرباء كامل'
+                ]
+            },
+            {
+                id: 'superlux',
+                name: 'باقة سوبر لوكس',
+                badge: 'الأكثر طلباً',
+                pricesByArea: { 30: 295000, 60: 400000, 80: 575000 },
+                description: 'التوازن المثالي بين الفخامة والمتانة بعزل ساحلي مضاعف وخامات عالية الجودة.',
+                features: [
+                    'تأسيس سباكة ألماني وكهرباء السويدي بضمان معتمد',
+                    'عزل مائي وحراري مزدوج للحمامات والمطبخ',
+                    'بورسلين فرز أول للريسبشن وسيراميك فاخر للغرف والتراس',
+                    'أعمال جبس بورد وبيوت نور للريسبشن والغرف',
+                    'دهانات جوتن المقاومة للرطوبة وأبواب خشب قشرة أرو'
+                ]
+            },
+            {
+                id: 'vip',
+                name: 'باقة VIP الفاخرة',
+                badge: 'تشطيب فندقي',
+                pricesByArea: { 30: 340000, 60: 450000, 80: 650000 },
+                description: 'تصميم فندقي ساحلي 3D بأعلى مواصفات العزل والأخشاب المعالجة والإضاءة الحديثة.',
+                features: [
+                    'تصميم هندسي 3D متكامل وتأسيس تكييفات بالكامل',
+                    'أقوى نظام عزل رطوبة وملوحة مخصص للقرى الساحلية',
+                    'بورسلين مستورد أو HDF ألماني مقاوم للمياه والرطوبة',
+                    'أسقف جبس بورد مع إضاءة ليد بروفايل وماجنتيك تراك',
+                    'أبواب معالجة ضد الرطوبة وخلاطات وأطقم صحية مستوردة'
+                ]
+            }
+        ];
+
+        const DEMO_CHALETS = [
+            {
+                code: 'CH-101',
+                ownerName: 'م. أحمد محمود',
+                ownerEmail: '',
+                village: 'العين السخنة - قرية لافيستا 6',
+                area: 30,
+                packageName: 'باقة سوبر لوكس',
+                notes: 'تسليم قبل موسم الصيف',
+                stages: [
+                    { name: STAGE_NAMES[0], percent: 100 },
+                    { name: STAGE_NAMES[1], percent: 100 },
+                    { name: STAGE_NAMES[2], percent: 100 },
+                    { name: STAGE_NAMES[3], percent: 85 },
+                    { name: STAGE_NAMES[4], percent: 40 },
+                    { name: STAGE_NAMES[5], percent: 0 }
+                ],
+                updates: [
+                    { date: '2026/11/22', text: 'تم الانتهاء من 85% من أعمال السيراميك والبورسلين وجاري تجهيز الدهانات.' },
+                    { date: '2026/11/15', text: 'تسليم أعمال المحارة والجبس بورد وبيوت النور بالكامل.' },
+                    { date: '2026/11/04', text: 'إتمام تأسيس الكهرباء والسباكة واختبار ضغط المواسير بنجاح.' }
+                ],
+                updatedAt: Date.now() - 1000 * 60 * 60 * 2
+            },
+            {
+                code: 'CH-204',
+                ownerName: 'د. سارة عبد الرحمن',
+                ownerEmail: '',
+                village: 'الساحل الشمالي - قرية مراسي',
+                area: 60,
+                packageName: 'باقة VIP الفاخرة',
+                notes: 'تصميم فندقي بألوان هادئة',
+                stages: [
+                    { name: STAGE_NAMES[0], percent: 100 },
+                    { name: STAGE_NAMES[1], percent: 100 },
+                    { name: STAGE_NAMES[2], percent: 70 },
+                    { name: STAGE_NAMES[3], percent: 25 },
+                    { name: STAGE_NAMES[4], percent: 0 },
+                    { name: STAGE_NAMES[5], percent: 0 }
+                ],
+                updates: [
+                    { date: '2026/11/21', text: 'تم إنجاز 70% من المحارة والجبس بورد وتوريد البورسلين المستورد.' },
+                    { date: '2026/11/11', text: 'الانتهاء الكامل من تأسيس الكهرباء والسباكة وصرف التكييفات.' }
+                ],
+                updatedAt: Date.now() - 1000 * 60 * 60 * 18
+            },
+            {
+                code: 'CH-309',
+                ownerName: 'أ. حسام الدين فؤاد',
+                ownerEmail: '',
+                village: 'الساحل الشمالي - قرية أمواج',
+                area: 80,
+                packageName: 'الباقة الاقتصادية',
+                notes: 'شاليه دور أرضي بحديقة',
+                stages: [
+                    { name: STAGE_NAMES[0], percent: 100 },
+                    { name: STAGE_NAMES[1], percent: 100 },
+                    { name: STAGE_NAMES[2], percent: 100 },
+                    { name: STAGE_NAMES[3], percent: 100 },
+                    { name: STAGE_NAMES[4], percent: 100 },
+                    { name: STAGE_NAMES[5], percent: 75 }
+                ],
+                updates: [
+                    { date: '2026/11/23', text: 'جاري التقفيل النهائي وتركيب وحدات الإضاءة والنظافة الشاملة قبل التسليم.' },
+                    { date: '2026/11/17', text: 'تم الانتهاء من الدهانات والديكورات بالكامل بنسبة 100%.' }
+                ],
+                updatedAt: Date.now() - 1000 * 60 * 60 * 1
+            }
+        ];
+
+        /* =========================================================================
+           3. حالة التطبيق (State)
+           ========================================================================= */
+        let selectedArea = 60;
+        let selectedPackageId = 'superlux';
+
+        let chaletsMap = {};
+        let requestsList = [];
+        let activeUnitCode = 'CH-101';
+
+        let currentUser = null;
+        let isAdminAuthenticated = false;
+        let adminLoginMode = 'pin';
+        let selectedAdminUnitCode = null;
+        let pendingConfirmAction = null;
+        let toastTimer = null;
+
+        let cloudState = 'connecting'; // 'connected' | 'error' | 'connecting'
+        let hasReceivedChaletsSnapshot = false;
+        let unsubChalets = null;
+        let unsubRequests = null;
+        let loadTimeoutHandle = null;
+
+        /* =========================================================================
+           4. دوال مساعدة (Helpers)
+           ========================================================================= */
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatEGP(num) {
+            return Number(num || 0).toLocaleString('en-US');
+        }
+
+        function formatArabicDate(timestamp) {
+            if (!timestamp) return 'الآن';
+            const d = new Date(timestamp);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}/${m}/${day}`;
+        }
+
+        function getChaletAreaObj(area) {
+            return CHALET_AREAS.find(c => c.area === Number(area)) || CHALET_AREAS[1];
+        }
+
+        function getPackageObj(pkgId) {
+            return PACKAGES.find(p => p.id === pkgId) || PACKAGES[1];
+        }
+
+        function getPackagePriceForArea(pkgId, area) {
+            const pkg = getPackageObj(pkgId);
+            return pkg.pricesByArea[Number(area)] || pkg.pricesByArea[60];
+        }
+
+        function normalizeStages(stages) {
+            if (Array.isArray(stages) && stages.length === 6) {
+                return stages.map((s, idx) => ({
+                    name: STAGE_NAMES[idx],
+                    percent: Math.min(100, Math.max(0, Number(s.percent) || 0))
+                }));
+            }
+            return STAGE_NAMES.map(name => ({ name, percent: 0 }));
+        }
+
+        function calculateOverallPercent(stages) {
+            const normalized = normalizeStages(stages);
+            const sum = normalized.reduce((acc, s) => acc + s.percent, 0);
+            return Math.round(sum / normalized.length);
+        }
+
+        function getStageBadge(percent) {
+            if (percent >= 100) {
+                return { label: 'مكتمل', pill: 'bg-emerald-50 text-emerald-700 border-emerald-200', bar: 'bg-emerald-500' };
+            }
+            if (percent > 0) {
+                return { label: 'جاري التنفيذ', pill: 'bg-amber-50 text-amber-700 border-amber-200', bar: 'bg-bronze' };
+            }
+            return { label: 'لم يبدأ', pill: 'bg-gray-100 text-gray-500 border-gray-200', bar: 'bg-gray-300' };
+        }
+
+        function getOverallStatusInfo(percent) {
+            if (percent >= 100) {
+                return { label: 'مكتمل وجاهز للتسليم', pill: 'bg-emerald-50 text-emerald-700 border-emerald-200', note: 'تهانينا! تم الانتهاء من كافة مراحل التشطيب بنجاح.' };
+            }
+            if (percent >= 80) {
+                return { label: 'المراحل النهائية', pill: 'bg-emerald-50 text-emerald-700 border-emerald-200', note: 'الشاليه في مرحلة التشطيب النهائي والاستعداد للتسليم.' };
+            }
+            if (percent > 0) {
+                return { label: 'جاري التنفيذ', pill: 'bg-amber-50 text-amber-700 border-amber-200', note: 'الأعمال تسير بانتظام وفق الجدول الهندسي المتفق عليه.' };
+            }
+            return { label: 'قيد التجهيز', pill: 'bg-gray-100 text-gray-600 border-gray-200', note: 'جاري التجهيز المبدئي لبدء أعمال التشطيب في الموقع.' };
+        }
+
+        function mapAuthErrorToArabic(code) {
+            switch (code) {
+                case 'auth/invalid-credential':
+                case 'auth/wrong-password':
+                case 'auth/user-not-found':
+                    return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+                case 'auth/email-already-in-use':
+                    return 'هذا البريد الإلكتروني مسجل بالفعل، يمكنك تسجيل الدخول مباشرة.';
+                case 'auth/weak-password':
+                    return 'كلمة المرور ضعيفة جداً؛ يجب أن تتكون من 6 أحرف على الأقل.';
+                case 'auth/invalid-email':
+                    return 'صيغة البريد الإلكتروني غير صحيحة.';
+                case 'auth/too-many-requests':
+                    return 'تم تجاوز عدد المحاولات المسموح بها، يرجى الانتظار قليلاً ثم المحاولة.';
+                case 'auth/network-request-failed':
+                    return 'تعذر الاتصال بالإنترنت، يرجى فحص الشبكة والمحاولة مرة أخرى.';
+                default:
+                    return 'تعذر إتمام العملية، يرجى التأكد من البيانات والمحاولة مرة أخرى.';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const dot = document.getElementById('toastDot');
+            const text = document.getElementById('toastText');
+            text.textContent = message;
+            dot.className = `w-2.5 h-2.5 rounded-full shrink-0 ${type === 'error' ? 'bg-red-400' : 'bg-emerald-400'}`;
+            toast.classList.remove('hidden');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add('hidden'), 3800);
+        }
+
+        function openConfirmModal(title, message, onConfirm) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            pendingConfirmAction = onConfirm;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            pendingConfirmAction = null;
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function suggestNextUnitCode() {
+            let code = '';
+            do {
+                code = `CH-${Math.floor(400 + Math.random() * 550)}`;
+            } while (chaletsMap[code]);
+            return code;
+        }
+
+        /* =========================================================================
+           5. إدارة الاتصال السحابي المباشر (Firestore + 6s Timeout Fallback)
+           ========================================================================= */
+        function updateCloudStatusUI(state, customMsg = '') {
+            cloudState = state;
+            const topDot = document.getElementById('topCloudDot');
+            const topText = document.getElementById('topCloudText');
+            const trackerDot = document.getElementById('trackerLiveDot');
+            const trackerText = document.getElementById('trackerLiveText');
+            const adminTabDot = document.getElementById('adminCloudTabDot');
+            const panelDot = document.getElementById('cloudPanelDot');
+            const panelBadge = document.getElementById('cloudPanelBadge');
+
+            if (state === 'connected') {
+                topDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+                topText.textContent = 'متصل بالسحابة (bunyan-chalet)';
+                trackerDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+                trackerText.textContent = 'متصل بالسحابة (bunyan-chalet) • تحديث لحظي';
+                adminTabDot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                panelDot.className = 'w-3.5 h-3.5 rounded-full bg-emerald-500';
+                panelBadge.textContent = 'متصل بنجاح';
+                panelBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200';
+            } else if (state === 'error') {
+                topDot.className = 'w-2 h-2 rounded-full bg-red-400';
+                topText.textContent = customMsg || 'تعذر الاتصال بالسحابة (bunyan-chalet)';
+                trackerDot.className = 'w-2 h-2 rounded-full bg-red-500';
+                trackerText.textContent = 'تعذر مزامنة السحابة حالياً';
+                adminTabDot.className = 'w-2 h-2 rounded-full bg-red-500';
+                panelDot.className = 'w-3.5 h-3.5 rounded-full bg-red-500';
+                panelBadge.textContent = 'غير متصل';
+                panelBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-red-50 text-red-700 border border-red-200';
+            } else {
+                topDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+                topText.textContent = 'جاري الاتصال بالسحابة (bunyan-chalet)...';
+                trackerDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+                trackerText.textContent = 'جاري مزامنة بيانات الشاليهات...';
+                adminTabDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+                panelDot.className = 'w-3.5 h-3.5 rounded-full bg-amber-400';
+                panelBadge.textContent = 'جاري الفحص';
+                panelBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-700 border border-amber-200';
+            }
+
+            document.getElementById('cloudTotalChalets').textContent = Object.keys(chaletsMap).length;
+            document.getElementById('cloudTotalRequests').textContent = requestsList.length;
+        }
+
+        async function seedDemoChalets(showFeedback = false) {
+            try {
+                for (const chalet of DEMO_CHALETS) {
+                    await setDoc(doc(chaletsCol, chalet.code), chalet);
+                }
+                if (showFeedback) {
+                    showToast('تمت إضافة الشاليهات التجريبية (CH-101, CH-204, CH-309) بنجاح');
+                }
+            } catch (err) {
+                console.error('Seed error:', err);
+                if (showFeedback) {
+                    showToast('تعذر إضافة الشاليهات التجريبية؛ تأكد من صلاحيات Firestore', 'error');
+                }
+            }
+        }
+
+        async function startCloudSync() {
+            if (unsubChalets) unsubChalets();
+            if (unsubRequests) unsubRequests();
+            if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
+
+            hasReceivedChaletsSnapshot = false;
+            updateCloudStatusUI('connecting');
+            document.getElementById('trackerErrorBox').classList.add('hidden');
+            if (Object.keys(chaletsMap).length === 0) {
+                document.getElementById('trackerLoading').classList.remove('hidden');
+            }
+
+            // مهلة 6 ثوانٍ لمنع أي تحميل لا نهائي
+            loadTimeoutHandle = setTimeout(() => {
+                if (!hasReceivedChaletsSnapshot) {
+                    document.getElementById('trackerLoading').classList.add('hidden');
+                    document.getElementById('trackerErrorDetails').textContent =
+                        'استغرق الاتصال بقاعدة البيانات وقتاً أطول من المعتاد. تأكد من الإنترنت ومن أن قواعد Firestore في وضع الاختبار (Test Mode). باقي أدوات الموقع (الحاسبة، الدخول، لوحة الإدارة) تعمل بشكل طبيعي.';
+                    document.getElementById('trackerErrorBox').classList.remove('hidden');
+                    updateCloudStatusUI('error', 'مهلة الاتصال انتهت - تحقق من Firestore');
+                }
+            }, 6000);
+
+            // فحص وزراعة البيانات التجريبية في حال كانت المجموعة فارغة عند أول تشغيل
+            try {
+                const initialSnap = await getDocs(chaletsCol);
+                if (initialSnap.empty) {
+                    await seedDemoChalets(false);
+                }
+            } catch (err) {
+                console.error('Initial chalets check error:', err);
+            }
+
+            // الاستماع اللحظي لمجموعة الشاليهات
+            unsubChalets = onSnapshot(
+                chaletsCol,
+                (snapshot) => {
+                    hasReceivedChaletsSnapshot = true;
+                    if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
+
+                    const nextMap = {};
+                    snapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        const code = (data.code || docSnap.id).toUpperCase();
+                        nextMap[code] = { ...data, code, stages: normalizeStages(data.stages) };
+                    });
+                    chaletsMap = nextMap;
+
+                    document.getElementById('trackerLoading').classList.add('hidden');
+                    document.getElementById('trackerErrorBox').classList.add('hidden');
+                    updateCloudStatusUI('connected');
+                    onChaletsUpdated();
+                },
+                (err) => {
+                    console.error('Chalets snapshot error:', err);
+                    if (loadTimeoutHandle) clearTimeout(loadTimeoutHandle);
+                    document.getElementById('trackerLoading').classList.add('hidden');
+                    const isPerm = err?.code === 'permission-denied';
+                    document.getElementById('trackerErrorDetails').textContent = isPerm
+                        ? 'تم رفض الوصول لـ Firestore (permission-denied). يرجى تفعيل قواعد القراءة والكتابة (Test Mode) من Firebase Console.'
+                        : 'تعذر الاتصال بقاعدة بيانات Firestore. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
+                    document.getElementById('trackerErrorBox').classList.remove('hidden');
+                    updateCloudStatusUI('error', isPerm ? 'صلاحيات Firestore مغلقة' : 'تعذر الاتصال بالسحابة');
+                }
+            );
+
+            // الاستماع اللحظي لطلبات المعاينة
+            unsubRequests = onSnapshot(
+                requestsCol,
+                (snapshot) => {
+                    const list = [];
+                    snapshot.forEach((docSnap) => {
+                        list.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                    list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    requestsList = list;
+                    document.getElementById('cloudTotalRequests').textContent = requestsList.length;
+                    renderAdminInquiriesList();
+                },
+                (err) => {
+                    console.error('Requests snapshot error:', err);
+                }
+            );
+        }
+
+        function onChaletsUpdated() {
+            document.getElementById('cloudTotalChalets').textContent = Object.keys(chaletsMap).length;
+            renderDemoChips();
+            renderMyLinkedChaletsBar();
+
+            const codes = Object.keys(chaletsMap).sort();
+            if (!chaletsMap[activeUnitCode] && codes.length > 0) {
+                activeUnitCode = codes[0];
+            }
+
+            if (chaletsMap[activeUnitCode]) {
+                renderUnitDashboard(chaletsMap[activeUnitCode]);
+            } else {
+                document.getElementById('unitDashboard').classList.add('hidden');
+            }
+
+            if (isAdminAuthenticated) {
+                renderAdminUnitsList();
+                if (selectedAdminUnitCode && chaletsMap[selectedAdminUnitCode]) {
+                    updateAdminEditHeader(chaletsMap[selectedAdminUnitCode]);
+                } else if (selectedAdminUnitCode && !chaletsMap[selectedAdminUnitCode]) {
+                    selectedAdminUnitCode = null;
+                    showAdminView('empty');
+                }
+            }
+
+            if (!document.getElementById('clientPortalModal').classList.contains('hidden')) {
+                renderClientPortalContent();
+            }
+        }
+
+        /* =========================================================================
+           6. حاسبة تشطيب الشاليهات والباقات
+           ========================================================================= */
+        function renderChaletAreas() {
+            const container = document.getElementById('chaletAreasContainer');
+            container.innerHTML = '';
+
+            CHALET_AREAS.forEach((item) => {
+                const isSelected = item.area === selectedArea;
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = `text-right rounded-2xl p-4 sm:p-5 border-2 transition-all duration-200 flex flex-col justify-between ${
+                    isSelected
+                        ? 'bg-white border-bronze shadow-md ring-2 ring-bronze/15'
+                        : 'bg-white border-warmBorder hover:border-bronze/50'
+                }`;
+
+                card.addEventListener('click', () => {
+                    selectedArea = item.area;
+                    renderChaletAreas();
+                    renderPackages();
+                    updateCalculatorSummary();
+                });
+
+                card.innerHTML = `
+                    <div class="w-full">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-lg font-extrabold text-slateDark">${item.title}</span>
+                            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                                isSelected ? 'border-bronze bg-bronze' : 'border-slateMid/30'
+                            }">
+                                ${isSelected ? '<div class="w-2 h-2 rounded-full bg-white"></div>' : ''}
+                            </div>
+                        </div>
+                        <p class="text-xs text-slateMid/70 mt-1">${item.subtitle}</p>
+                        <div class="text-[11px] font-bold text-slateMid/80 mt-2">مدة التسليم: ${item.deliveryDays}</div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-warmBorder w-full">
+                        <div class="text-[11px] font-semibold text-slateMid/70">نطاق السعر:</div>
+                        <div class="text-xs sm:text-sm font-extrabold text-bronzeDark mt-0.5">
+                            ${formatEGP(item.minPrice)} – ${formatEGP(item.maxPrice)} ج.م
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderPackages() {
+            const container = document.getElementById('packagesContainer');
+            container.innerHTML = '';
+
+            PACKAGES.forEach((pkg) => {
+                const isSelected = pkg.id === selectedPackageId;
+                const priceForArea = getPackagePriceForArea(pkg.id, selectedArea);
+                const card = document.createElement('div');
+                card.className = `cursor-pointer rounded-2xl p-5 border-2 transition-all duration-200 ${
+                    isSelected
+                        ? 'bg-white border-bronze shadow-md ring-2 ring-bronze/15'
+                        : 'bg-white border-warmBorder hover:border-bronze/50'
+                }`;
+
+                card.addEventListener('click', () => {
+                    selectedPackageId = pkg.id;
+                    renderPackages();
+                    updateCalculatorSummary();
+                });
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-start gap-3.5">
+                            <div class="mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                                isSelected ? 'border-bronze bg-bronze' : 'border-slateMid/30'
+                            }">
+                                ${isSelected ? '<div class="w-2 h-2 rounded-full bg-white"></div>' : ''}
+                            </div>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h4 class="text-base font-extrabold text-slateDark">${pkg.name}</h4>
+                                    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-bronzeSoft text-bronzeDark border border-bronze/30">${pkg.badge}</span>
+                                </div>
+                                <p class="text-xs text-slateMid/75 mt-1">${pkg.description}</p>
+                            </div>
+                        </div>
+
+                        <div class="sm:text-left pr-8 sm:pr-0 shrink-0">
+                            <span class="text-xl font-extrabold text-slateDark">${formatEGP(priceForArea)}</span>
+                            <span class="text-xs font-bold text-slateMid/70 block sm:inline"> ج.م</span>
+                            <span class="block text-[11px] font-semibold text-bronzeDark">لشاليه ${selectedArea} م²</span>
+                        </div>
+                    </div>
+
+                    <ul class="mt-4 pt-3.5 border-t border-warmBorder grid grid-cols-1 sm:grid-cols-2 gap-2 pr-0 sm:pr-8">
+                        ${pkg.features.map(feat => `
+                            <li class="flex items-start gap-2 text-xs font-semibold text-slateMid/90">
+                                <span class="w-1.5 h-1.5 rounded-full bg-bronze shrink-0 mt-1.5"></span>
+                                <span>${feat}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateCalculatorSummary() {
+            const areaObj = getChaletAreaObj(selectedArea);
+            const pkg = getPackageObj(selectedPackageId);
+            const exactPrice = getPackagePriceForArea(pkg.id, selectedArea);
+
+            document.getElementById('summaryPackageBadge').textContent = pkg.name;
+            document.getElementById('summaryTotalCost').textContent = formatEGP(exactPrice);
+            document.getElementById('summaryRangeLabel').textContent = areaObj.title;
+            document.getElementById('summaryPriceRange').textContent = `من ${formatEGP(areaObj.minPrice)} إلى ${formatEGP(areaObj.maxPrice)} ج.م`;
+            document.getElementById('summaryArea').textContent = selectedArea;
+            document.getElementById('summaryDuration').textContent = areaObj.deliveryDays;
+
+            document.getElementById('summaryFeatures').innerHTML = pkg.features.map(f => `
+                <li class="flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-bronze shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>${f}</span>
+                </li>
+            `).join('');
+        }
+
+        /* =========================================================================
+           7. متابعة الشاليه (Live Tracker)
+           ========================================================================= */
+        function renderDemoChips() {
+            const container = document.getElementById('demoChipsContainer');
+            container.innerHTML = '';
+
+            const codes = Object.keys(chaletsMap).sort();
+            if (codes.length === 0) {
+                container.innerHTML = '<span class="text-xs text-slateMid/60">لا توجد شاليهات مسجلة حالياً.</span>';
+                return;
+            }
+
+            codes.slice(0, 8).forEach((code) => {
+                const u = chaletsMap[code];
+                const pct = calculateOverallPercent(u.stages);
+                const isActive = code === activeUnitCode;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center gap-2 ${
+                    isActive
+                        ? 'border-bronze bg-bronzeSoft text-slateDark ring-1 ring-bronze/40'
+                        : 'border-warmBorder bg-white hover:border-bronze text-slateDark'
+                }`;
+                btn.innerHTML = `
+                    <span class="text-bronzeDark font-extrabold">${escapeHtml(code)}</span>
+                    <span class="text-slateMid/75 font-semibold">${escapeHtml(u.area)} م² • ${pct}%</span>
+                `;
+                btn.addEventListener('click', () => selectUnitForClient(code));
+                container.appendChild(btn);
+            });
+        }
+
+        function selectUnitForClient(rawCode) {
+            const code = rawCode.trim().toUpperCase();
+            const errorMsg = document.getElementById('searchErrorMsg');
+
+            if (!chaletsMap[code]) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            activeUnitCode = code;
+            document.getElementById('unitCodeInput').value = code;
+            renderDemoChips();
+            renderMyLinkedChaletsBar();
+            renderUnitDashboard(chaletsMap[code]);
+        }
+
+        function renderUnitDashboard(unit) {
+            const dashboard = document.getElementById('unitDashboard');
+            dashboard.classList.remove('hidden');
+
+            const stages = normalizeStages(unit.stages);
+            const overallPct = calculateOverallPercent(stages);
+            const completedCount = stages.filter(s => s.percent >= 100).length;
+            const statusInfo = getOverallStatusInfo(overallPct);
+
+            document.getElementById('unitCodeInput').value = unit.code;
+            document.getElementById('dashUnitCode').textContent = unit.code;
+            document.getElementById('dashOwnerName').textContent = unit.ownerName || '—';
+            document.getElementById('dashVillage').textContent = unit.village || 'غير محدد';
+            document.getElementById('dashArea').textContent = `${unit.area || 0} م²`;
+            document.getElementById('dashPackage').textContent = unit.packageName || '—';
+            document.getElementById('dashCompletedStages').textContent = `${completedCount} من 6 مراحل`;
+            document.getElementById('dashLastUpdated').textContent = formatArabicDate(unit.updatedAt);
+
+            const badgeEl = document.getElementById('dashOverallBadge');
+            badgeEl.textContent = statusInfo.label;
+            badgeEl.className = `px-3 py-1 rounded-full text-xs font-bold border ${statusInfo.pill}`;
+
+            const circumference = 2 * Math.PI * 76;
+            const offset = circumference - (overallPct / 100) * circumference;
+            const circle = document.getElementById('overallProgressCircle');
+            circle.style.strokeDasharray = `${circumference}`;
+            circle.style.strokeDashoffset = `${offset}`;
+            circle.style.stroke = overallPct >= 100 ? '#10B981' : '#B88B58';
+
+            document.getElementById('overallPercentText').textContent = `${overallPct}%`;
+            document.getElementById('overallSummaryNote').textContent = statusInfo.note;
+
+            const stagesContainer = document.getElementById('stagesList');
+            stagesContainer.innerHTML = '';
+
+            stages.forEach((stage, idx) => {
+                const stBadge = getStageBadge(stage.percent);
+                const item = document.createElement('div');
+                item.className = 'p-4 rounded-2xl border border-warmBorder bg-warmBg/50';
+                item.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-lg bg-white border border-warmBorder text-xs font-extrabold text-slateDark flex items-center justify-center">${idx + 1}</span>
+                            <span class="text-sm font-extrabold text-slateDark">${escapeHtml(stage.name)}</span>
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${stBadge.pill}">${stBadge.label}</span>
+                        </div>
+                        <span class="text-sm font-extrabold text-slateDark">${stage.percent}%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-warmBorder/80 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500 ${stBadge.bar}" style="width: ${stage.percent}%"></div>
+                    </div>
+                `;
+                stagesContainer.appendChild(item);
+            });
+
+            const updatesContainer = document.getElementById('siteUpdatesList');
+            const updates = Array.isArray(unit.updates) ? unit.updates : [];
+            if (updates.length === 0) {
+                updatesContainer.innerHTML = '<p class="text-xs text-slateMid/60">لا توجد تحديثات مسجلة حتى الآن.</p>';
+            } else {
+                updatesContainer.innerHTML = updates.map((upd, idx) => `
+                    <div class="relative pr-4 ${idx !== updates.length - 1 ? 'pb-4 border-r-2 border-warmBorder' : 'border-r-2 border-transparent'}">
+                        <span class="absolute -right-[5px] top-1.5 w-2.5 h-2.5 rounded-full ${idx === 0 ? 'bg-bronze ring-4 ring-bronzeSoft' : 'bg-slateMid/30'}"></span>
+                        <div class="text-[11px] font-bold text-bronzeDark">${escapeHtml(upd.date || '')}</div>
+                        <p class="text-xs text-slateMid/90 mt-1 leading-relaxed">${escapeHtml(upd.text || '')}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        /* =========================================================================
+           8. نظام حسابات العملاء الحقيقي (Firebase Authentication)
+           ========================================================================= */
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateClientHeaderUI();
+        });
+
+        function getCurrentUserDisplayName() {
+            if (!currentUser) return '';
+            return currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : 'العميل');
+        }
+
+        function updateClientHeaderUI() {
+            const loginBtn = document.getElementById('openClientAuthBtn');
+            const loggedBar = document.getElementById('clientLoggedInBar');
+
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                loggedBar.classList.remove('hidden');
+                document.getElementById('headerClientName').textContent = getCurrentUserDisplayName();
+            } else {
+                loginBtn.classList.remove('hidden');
+                loggedBar.classList.add('hidden');
+            }
+            renderMyLinkedChaletsBar();
+        }
+
+        function getClientLinkedChalets() {
+            if (!currentUser || !currentUser.email) return [];
+            const email = currentUser.email.toLowerCase();
+            return Object.values(chaletsMap).filter(u => (u.ownerEmail || '').toLowerCase() === email);
+        }
+
+        function renderMyLinkedChaletsBar() {
+            const bar = document.getElementById('myLinkedChaletsBar');
+            const chips = document.getElementById('myLinkedChaletsChips');
+
+            if (!currentUser) {
+                bar.classList.add('hidden');
+                return;
+            }
+
+            const myChalets = getClientLinkedChalets();
+            bar.classList.remove('hidden');
+            document.getElementById('myLinkedEmailLabel').textContent = currentUser.email || '';
+            chips.innerHTML = '';
+
+            if (myChalets.length === 0) {
+                chips.innerHTML = '<span class="text-xs text-slateMid/80">لا توجد شاليهات مرتبطة بحسابك بعد — اضغط "إدارة شاليهاتي" لإضافة شاليهك.</span>';
+                return;
+            }
+
+            myChalets.forEach((u) => {
+                const pct = calculateOverallPercent(u.stages);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-3 py-1.5 rounded-xl text-xs font-extrabold border transition flex items-center gap-2 ${
+                    u.code === activeUnitCode
+                        ? 'bg-slateDark text-bronze border-slateDark'
+                        : 'bg-white text-slateDark border-bronze/40 hover:bg-bronze/15'
+                }`;
+                btn.innerHTML = `<span>${escapeHtml(u.code)}</span><span class="opacity-80">${escapeHtml(u.area)} م² • ${pct}%</span>`;
+                btn.addEventListener('click', () => selectUnitForClient(u.code));
+                chips.appendChild(btn);
+            });
+        }
+
+        function openClientAuthModal(tab = 'login') {
+            document.getElementById('clientAuthError').classList.add('hidden');
+            switchClientAuthTab(tab);
+            document.getElementById('clientAuthModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeClientAuthModal() {
+            document.getElementById('clientAuthModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function switchClientAuthTab(tab) {
+            const loginBtn = document.getElementById('authTabLoginBtn');
+            const regBtn = document.getElementById('authTabRegisterBtn');
+            const loginForm = document.getElementById('clientLoginForm');
+            const regForm = document.getElementById('clientRegisterForm');
+            document.getElementById('clientAuthError').classList.add('hidden');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+                loginBtn.className = 'py-2.5 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition';
+                regBtn.className = 'py-2.5 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition';
+            } else {
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+                regBtn.className = 'py-2.5 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition';
+                loginBtn.className = 'py-2.5 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition';
+            }
+        }
+
+        function showClientAuthError(msg) {
+            const el = document.getElementById('clientAuthError');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        async function handleClientLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('clientLoginSubmitBtn');
+            document.getElementById('clientAuthError').classList.add('hidden');
+
+            btn.disabled = true;
+            btn.textContent = 'جاري تسجيل الدخول...';
+
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, password);
+                closeClientAuthModal();
+                e.target.reset();
+                showToast(`أهلاً بك يا ${cred.user.displayName || email.split('@')[0]}`);
+
+                const myChalets = getClientLinkedChalets();
+                if (myChalets.length > 0) selectUnitForClient(myChalets[0].code);
+            } catch (err) {
+                console.error('Login error:', err);
+                showClientAuthError(mapAuthErrorToArabic(err.code));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'تسجيل الدخول';
+            }
+        }
+
+        async function handleClientRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const btn = document.getElementById('clientRegisterSubmitBtn');
+            document.getElementById('clientAuthError').classList.add('hidden');
+
+            if (!name || password.length < 6) {
+                showClientAuthError('يرجى إدخال الاسم وكلمة مرور لا تقل عن 6 أحرف.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'جاري إنشاء الحساب...';
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(cred.user, { displayName: name });
+                currentUser = auth.currentUser;
+                updateClientHeaderUI();
+                closeClientAuthModal();
+                e.target.reset();
+                showToast(`تم إنشاء حسابك بنجاح! أهلاً بك يا ${name}`);
+            } catch (err) {
+                console.error('Register error:', err);
+                showClientAuthError(mapAuthErrorToArabic(err.code));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'إنشاء الحساب والدخول فوراً';
+            }
+        }
+
+        async function handleClientLogout() {
+            try {
+                await signOut(auth);
+                document.getElementById('clientPortalModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                showToast('تم تسجيل الخروج بنجاح');
+            } catch (err) {
+                console.error('Sign out error:', err);
+                showToast('حدث خطأ أثناء تسجيل الخروج', 'error');
+            }
+        }
+
+        function openClientPortal() {
+            if (!currentUser) {
+                openClientAuthModal('login');
+                return;
+            }
+            document.getElementById('portalClientName').textContent = getCurrentUserDisplayName();
+            document.getElementById('portalClientEmail').textContent = currentUser.email || '';
+            document.getElementById('clientChaletForm').classList.add('hidden');
+            renderClientPortalContent();
+            document.getElementById('clientPortalModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderClientPortalContent() {
+            if (!currentUser) return;
+            const myChalets = getClientLinkedChalets();
+            const listEl = document.getElementById('portalChaletsList');
+            listEl.innerHTML = '';
+
+            if (myChalets.length === 0) {
+                listEl.innerHTML = '<div class="sm:col-span-2 text-center py-7 text-xs text-slateMid/75 bg-warmBg rounded-xl border border-warmBorder">لا توجد شاليهات مسجلة بحسابك حتى الآن. اضغط على "+ إضافة شاليه جديد" لتسجيل شاليهك.</div>';
+                return;
+            }
+
+            myChalets.forEach((u) => {
+                const pct = calculateOverallPercent(u.stages);
+                const card = document.createElement('div');
+                card.className = 'p-4 rounded-2xl bg-warmBg border border-warmBorder flex flex-col justify-between gap-3';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="px-2.5 py-0.5 rounded-lg bg-slateDark text-bronze text-xs font-extrabold">${escapeHtml(u.code)}</span>
+                            <span class="text-xs font-extrabold text-bronzeDark">${pct}% مكتمل</span>
+                        </div>
+                        <div class="text-sm font-extrabold text-slateDark mt-2">${escapeHtml(u.village || 'غير محدد')}</div>
+                        <div class="text-xs text-slateMid/80 mt-0.5">المالك: ${escapeHtml(u.ownerName)} • شاليه ${escapeHtml(u.area)} م²</div>
+                        <div class="text-xs font-bold text-bronzeDark mt-0.5">${escapeHtml(u.packageName)}</div>
+                        ${u.notes ? `<p class="text-[11px] text-slateMid/70 mt-1.5">${escapeHtml(u.notes)}</p>` : ''}
+                    </div>
+                    <div class="flex items-center gap-2 pt-2 border-t border-warmBorder">
+                        <button type="button" data-jump-code="${escapeHtml(u.code)}" class="flex-1 py-2 rounded-xl bg-slateDark text-white text-xs font-bold hover:bg-slateMid transition">متابعة التقدم المباشر</button>
+                        <button type="button" data-edit-code="${escapeHtml(u.code)}" class="px-3.5 py-2 rounded-xl bg-white border border-warmBorder text-slateDark text-xs font-bold hover:border-bronze transition">تعديل</button>
+                    </div>
+                `;
+
+                card.querySelector('[data-jump-code]').addEventListener('click', () => {
+                    selectUnitForClient(u.code);
+                    document.getElementById('clientPortalModal').classList.add('hidden');
+                    document.body.style.overflow = '';
+                    document.getElementById('tracker').scrollIntoView({ behavior: 'smooth' });
+                });
+
+                card.querySelector('[data-edit-code]').addEventListener('click', () => {
+                    document.getElementById('clientChaletFormTitle').textContent = `تعديل بيانات الشاليه ${u.code}`;
+                    document.getElementById('clientEditModeCode').value = u.code;
+                    const codeInput = document.getElementById('clientChaletCode');
+                    codeInput.value = u.code;
+                    codeInput.readOnly = true;
+                    document.getElementById('clientChaletOwnerName').value = u.ownerName || getCurrentUserDisplayName();
+                    document.getElementById('clientChaletVillage').value = u.village || '';
+                    document.getElementById('clientChaletArea').value = String(u.area || 60);
+                    document.getElementById('clientChaletPackage').value = u.packageName || 'باقة سوبر لوكس';
+                    document.getElementById('clientChaletNotes').value = u.notes || '';
+                    document.getElementById('clientChaletForm').classList.remove('hidden');
+                });
+
+                listEl.appendChild(card);
+            });
+        }
+
+        async function handleClientSaveChalet(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const btn = document.getElementById('clientSaveChaletBtn');
+            const editModeCode = document.getElementById('clientEditModeCode').value.trim().toUpperCase();
+            const code = document.getElementById('clientChaletCode').value.trim().toUpperCase().replace(/\s+/g, '-');
+            const ownerName = document.getElementById('clientChaletOwnerName').value.trim();
+            const village = document.getElementById('clientChaletVillage').value.trim();
+            const area = Number(document.getElementById('clientChaletArea').value) || 60;
+            const packageName = document.getElementById('clientChaletPackage').value;
+            const notes = document.getElementById('clientChaletNotes').value.trim();
+
+            if (!code || !ownerName || !village) return;
+
+            btn.disabled = true;
+            btn.textContent = 'جاري الحفظ في السحابة...';
+
+            try {
+                if (editModeCode && chaletsMap[editModeCode]) {
+                    await updateDoc(doc(chaletsCol, editModeCode), {
+                        ownerName,
+                        village,
+                        area,
+                        packageName,
+                        notes,
+                        updatedAt: Date.now()
+                    });
+                    showToast(`تم تحديث بيانات الشاليه ${editModeCode} بنجاح`);
+                } else {
+                    if (chaletsMap[code]) {
+                        showToast(`الكود ${code} مستخدم بالفعل، يرجى اختيار كود آخر`, 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'حفظ بيانات الشاليه على السحابة';
+                        return;
+                    }
+                    const newChalet = {
+                        code,
+                        ownerName,
+                        ownerEmail: (currentUser.email || '').toLowerCase(),
+                        village,
+                        area,
+                        packageName,
+                        notes,
+                        stages: STAGE_NAMES.map(name => ({ name, percent: 0 })),
+                        updates: [{ date: formatArabicDate(Date.now()), text: 'تم تسجيل الشاليه عبر حساب العميل وجاري مراجعة المهندس.' }],
+                        updatedAt: Date.now()
+                    };
+                    await setDoc(doc(chaletsCol, code), newChalet);
+                    activeUnitCode = code;
+                    showToast(`تمت إضافة الشاليه ${code} بنجاح`);
+                }
+
+                document.getElementById('clientChaletForm').classList.add('hidden');
+                document.getElementById('clientEditModeCode').value = '';
+                document.getElementById('clientChaletCode').readOnly = false;
+                e.target.reset();
+            } catch (err) {
+                console.error('Client save chalet error:', err);
+                showToast('حدث خطأ أثناء حفظ بيانات الشاليه في Firestore', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'حفظ بيانات الشاليه على السحابة';
+            }
+        }
+
+        /* =========================================================================
+           9. حجز معاينة مجانية (Saves to inspection_requests)
+           ========================================================================= */
+        function updateBookingModalPrice() {
+            const area = Number(document.getElementById('bookingAreaSelect').value);
+            const pkgId = document.getElementById('bookingPackageSelect').value;
+            const price = getPackagePriceForArea(pkgId, area);
+            document.getElementById('bookingCalculatedPrice').textContent = `${formatEGP(price)} ج.م`;
+        }
+
+        function openBookingModal() {
+            document.getElementById('bookingAreaSelect').value = String(selectedArea);
+            document.getElementById('bookingPackageSelect').value = selectedPackageId;
+            if (currentUser) {
+                document.getElementById('bookingName').value = getCurrentUserDisplayName();
+                document.getElementById('bookingEmail').value = currentUser.email || '';
+            }
+            updateBookingModalPrice();
+
+            document.getElementById('bookingFormContainer').classList.remove('hidden');
+            document.getElementById('bookingSuccessContainer').classList.add('hidden');
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('bookingSubmitBtn');
+            const clientName = document.getElementById('bookingName').value.trim();
+            const phone = document.getElementById('bookingPhone').value.trim();
+            const clientEmail = document.getElementById('bookingEmail').value.trim().toLowerCase() || (currentUser?.email?.toLowerCase() || '');
+            const area = Number(document.getElementById('bookingAreaSelect').value) || 60;
+            const pkgId = document.getElementById('bookingPackageSelect').value;
+            const pkg = getPackageObj(pkgId);
+            const price = getPackagePriceForArea(pkgId, area);
+            const village = document.getElementById('bookingVillage').value.trim();
+            const notes = document.getElementById('bookingNotes').value.trim();
+
+            if (!clientName || !phone || !village) return;
+
+            btn.disabled = true;
+            btn.textContent = 'جاري إرسال الطلب...';
+
+            try {
+                await addDoc(requestsCol, {
+                    clientName,
+                    clientEmail,
+                    phone,
+                    area,
+                    packageName: pkg.name,
+                    price,
+                    village,
+                    notes: notes || 'بدون ملاحظات إضافية',
+                    status: 'جديد',
+                    createdAt: Date.now()
+                });
+
+                document.getElementById('confirmedClientName').textContent = clientName;
+                document.getElementById('bookingFormContainer').classList.add('hidden');
+                document.getElementById('bookingSuccessContainer').classList.remove('hidden');
+                e.target.reset();
+                showToast('تم إرسال طلب المعاينة وحفظه بنجاح');
+            } catch (err) {
+                console.error('Booking submit error:', err);
+                showToast('تعذر حفظ الطلب في السحابة، يرجى المحاولة مرة أخرى', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'تأكيد إرسال طلب المعاينة';
+            }
+        }
+
+        /* =========================================================================
+           10. لوحة تحكم الإدارة (Admin Management Panel)
+           ========================================================================= */
+        function openAdminOverlay() {
+            document.getElementById('adminOverlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            if (isAdminAuthenticated) {
+                document.getElementById('adminLoginCard').classList.add('hidden');
+                document.getElementById('adminDashboardPanel').classList.remove('hidden');
+                renderAdminUnitsList();
+                renderAdminInquiriesList();
+                updateCloudStatusUI(cloudState);
+            } else {
+                document.getElementById('adminLoginCard').classList.remove('hidden');
+                document.getElementById('adminDashboardPanel').classList.add('hidden');
+                document.getElementById('adminLoginError').classList.add('hidden');
+                document.getElementById('adminPasscodeInput').value = '';
+                document.getElementById('adminEmailInput').value = '';
+                document.getElementById('adminPasswordInput').value = '';
+                setTimeout(() => {
+                    if (adminLoginMode === 'pin') document.getElementById('adminPasscodeInput').focus();
+                    else document.getElementById('adminEmailInput').focus();
+                }, 50);
+            }
+        }
+
+        function closeAdminOverlay() {
+            document.getElementById('adminOverlay').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function switchAdminLoginMode(mode) {
+            adminLoginMode = mode;
+            const pinBtn = document.getElementById('adminModePinBtn');
+            const emailBtn = document.getElementById('adminModeEmailBtn');
+            document.getElementById('adminLoginError').classList.add('hidden');
+
+            if (mode === 'pin') {
+                document.getElementById('adminPinGroup').classList.remove('hidden');
+                document.getElementById('adminEmailGroup').classList.add('hidden');
+                pinBtn.className = 'py-2 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition';
+                emailBtn.className = 'py-2 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition';
+            } else {
+                document.getElementById('adminPinGroup').classList.add('hidden');
+                document.getElementById('adminEmailGroup').classList.remove('hidden');
+                emailBtn.className = 'py-2 rounded-lg text-xs font-extrabold bg-white text-slateDark shadow-sm transition';
+                pinBtn.className = 'py-2 rounded-lg text-xs font-bold text-slateMid hover:text-slateDark transition';
+            }
+        }
+
+        function switchAdminTab(tab) {
+            const tabs = {
+                units: { btn: document.getElementById('tabUnitsBtn'), pane: document.getElementById('adminTabUnits') },
+                inquiries: { btn: document.getElementById('tabInquiriesBtn'), pane: document.getElementById('adminTabInquiries') },
+                cloud: { btn: document.getElementById('tabCloudBtn'), pane: document.getElementById('adminTabCloud') }
+            };
+
+            Object.keys(tabs).forEach((key) => {
+                const isActive = key === tab;
+                tabs[key].pane.classList.toggle('hidden', !isActive);
+                if (isActive) {
+                    tabs[key].btn.classList.add('border-bronze', 'text-slateDark', 'font-extrabold');
+                    tabs[key].btn.classList.remove('border-transparent', 'text-slateMid/70');
+                } else {
+                    tabs[key].btn.classList.remove('border-bronze', 'text-slateDark', 'font-extrabold');
+                    tabs[key].btn.classList.add('border-transparent', 'text-slateMid/70');
+                }
+            });
+        }
+
+        function showAdminView(view) {
+            document.getElementById('adminAddUnitCard').classList.toggle('hidden', view !== 'add');
+            document.getElementById('adminEditUnitCard').classList.toggle('hidden', view !== 'edit');
+            document.getElementById('adminEmptySelection').classList.toggle('hidden', view !== 'empty');
+        }
+
+        function renderAdminUnitsList() {
+            const listEl = document.getElementById('adminUnitsList');
+            const codes = Object.keys(chaletsMap).sort();
+            document.getElementById('adminUnitsCount').textContent = codes.length;
+
+            listEl.innerHTML = '';
+            if (codes.length === 0) {
+                listEl.innerHTML = '<div class="text-xs text-slateMid/60 text-center py-6">لا توجد شاليهات مسجلة بعد.</div>';
+                return;
+            }
+
+            codes.forEach((code) => {
+                const u = chaletsMap[code];
+                const pct = calculateOverallPercent(u.stages);
+                const isSelected = code === selectedAdminUnitCode;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `w-full text-right p-3 rounded-xl border transition flex items-center justify-between gap-2 ${
+                    isSelected
+                        ? 'bg-bronzeSoft border-bronze shadow-sm'
+                        : 'bg-warmBg/60 border-warmBorder hover:bg-warmBg'
+                }`;
+                btn.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-extrabold text-slateDark">${escapeHtml(u.code)}</span>
+                            <span class="text-[11px] font-semibold text-slateMid/75 truncate">${escapeHtml(u.ownerName)}</span>
+                        </div>
+                        <div class="text-[11px] text-slateMid/65 mt-0.5 truncate">${escapeHtml(u.area)} م² • ${escapeHtml(u.packageName)}</div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold shrink-0 ${
+                        pct >= 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-white border border-warmBorder text-bronzeDark'
+                    }">${pct}%</span>
+                `;
+                btn.addEventListener('click', () => openUnitEditor(code));
+                listEl.appendChild(btn);
+            });
+        }
+
+        function updateAdminEditHeader(unit) {
+            const pct = calculateOverallPercent(unit.stages);
+            document.getElementById('editUnitCodeBadge').textContent = unit.code;
+            document.getElementById('editUnitOverallBadge').textContent = `${pct}% مكتمل`;
+            document.getElementById('editUnitOwnerTitle').textContent = unit.ownerName || '—';
+        }
+
+        function openUnitEditor(code) {
+            const unit = chaletsMap[code];
+            if (!unit) return;
+
+            selectedAdminUnitCode = code;
+            renderAdminUnitsList();
+            showAdminView('edit');
+            updateAdminEditHeader(unit);
+
+            document.getElementById('editUnitOwnerInput').value = unit.ownerName || '';
+            document.getElementById('editUnitEmailInput').value = unit.ownerEmail || '';
+            document.getElementById('editUnitVillageInput').value = unit.village || '';
+            document.getElementById('editUnitAreaSelect').value = String(unit.area || 60);
+            document.getElementById('editUnitPackageSelect').value = unit.packageName || 'باقة سوبر لوكس';
+            document.getElementById('adminNewUpdateNote').value = '';
+
+            const slidersContainer = document.getElementById('adminStageSliders');
+            slidersContainer.innerHTML = '';
+
+            const stages = normalizeStages(unit.stages);
+            stages.forEach((stage, idx) => {
+                const box = document.createElement('div');
+                box.className = 'p-3.5 rounded-xl bg-warmBg/70 border border-warmBorder';
+                box.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <label for="admin-slider-${idx}" class="text-xs font-extrabold text-slateDark">${idx + 1}. ${escapeHtml(stage.name)}</label>
+                        <span id="admin-slider-val-${idx}" class="text-xs font-extrabold text-bronzeDark">${stage.percent}%</span>
+                    </div>
+                    <input
+                        type="range"
+                        id="admin-slider-${idx}"
+                        data-stage-idx="${idx}"
+                        min="0"
+                        max="100"
+                        step="5"
+                        value="${stage.percent}"
+                        class="admin-stage-slider w-full"
+                    >
+                `;
+                slidersContainer.appendChild(box);
+            });
+
+            slidersContainer.querySelectorAll('.admin-stage-slider').forEach((slider) => {
+                slider.addEventListener('input', (e) => {
+                    const idx = e.target.getAttribute('data-stage-idx');
+                    document.getElementById(`admin-slider-val-${idx}`).textContent = `${e.target.value}%`;
+
+                    let sum = 0;
+                    slidersContainer.querySelectorAll('.admin-stage-slider').forEach(s => sum += Number(s.value));
+                    const previewAvg = Math.round(sum / 6);
+                    document.getElementById('editUnitOverallBadge').textContent = `${previewAvg}% مكتمل`;
+                });
+            });
+        }
+
+        async function handleSaveUnitChanges() {
+            if (!selectedAdminUnitCode || !chaletsMap[selectedAdminUnitCode]) return;
+            const unit = chaletsMap[selectedAdminUnitCode];
+            const btn = document.getElementById('saveUnitChangesBtn');
+
+            const updatedStages = STAGE_NAMES.map((name, idx) => {
+                const slider = document.getElementById(`admin-slider-${idx}`);
+                return { name, percent: slider ? Number(slider.value) : 0 };
+            });
+
+            const ownerName = document.getElementById('editUnitOwnerInput').value.trim() || unit.ownerName;
+            const ownerEmail = document.getElementById('editUnitEmailInput').value.trim().toLowerCase();
+            const village = document.getElementById('editUnitVillageInput').value.trim() || unit.village;
+            const area = Number(document.getElementById('editUnitAreaSelect').value) || 60;
+            const packageName = document.getElementById('editUnitPackageSelect').value;
+
+            const newNoteText = document.getElementById('adminNewUpdateNote').value.trim();
+            const updatedNotes = Array.isArray(unit.updates) ? [...unit.updates] : [];
+            if (newNoteText) {
+                updatedNotes.unshift({
+                    date: formatArabicDate(Date.now()),
+                    text: newNoteText
+                });
+            }
+
+            btn.disabled = true;
+            btn.querySelector('span').textContent = 'جاري الحفظ...';
+
+            try {
+                await updateDoc(doc(chaletsCol, unit.code), {
+                    ownerName,
+                    ownerEmail,
+                    village,
+                    area,
+                    packageName,
+                    stages: updatedStages,
+                    updates: updatedNotes,
+                    updatedAt: Date.now()
+                });
+                document.getElementById('adminNewUpdateNote').value = '';
+                showToast(`تم حفظ التعديلات للشاليه ${unit.code} ونشرها لايف`);
+            } catch (err) {
+                console.error('Update chalet error:', err);
+                showToast('حدث خطأ أثناء حفظ التعديلات', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.querySelector('span').textContent = 'حفظ التعديلات';
+            }
+        }
+
+        async function handleAddNewUnit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitNewUnitBtn');
+            const code = document.getElementById('newUnitCode').value.trim().toUpperCase().replace(/\s+/g, '-');
+            const ownerName = document.getElementById('newUnitOwner').value.trim();
+            const ownerEmail = document.getElementById('newUnitEmail').value.trim().toLowerCase();
+            const village = document.getElementById('newUnitVillage').value.trim();
+            const area = Number(document.getElementById('newUnitArea').value) || 60;
+            const packageName = document.getElementById('newUnitPackage').value;
+
+            if (!code || !ownerName || !village) return;
+
+            if (chaletsMap[code]) {
+                showToast(`الكود ${code} مسجل بالفعل، اختر كوداً مختلفاً`, 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'جاري الإنشاء...';
+
+            try {
+                await setDoc(doc(chaletsCol, code), {
+                    code,
+                    ownerName,
+                    ownerEmail,
+                    village,
+                    area,
+                    packageName,
+                    notes: '',
+                    stages: STAGE_NAMES.map(name => ({ name, percent: 0 })),
+                    updates: [{ date: formatArabicDate(Date.now()), text: 'تم فتح ملف الشاليه في نظام المتابعة وتجهيز خطة التشطيب.' }],
+                    updatedAt: Date.now()
+                });
+                e.target.reset();
+                showToast(`تمت إضافة الشاليه ${code} بنجاح`);
+                selectedAdminUnitCode = code;
+                setTimeout(() => {
+                    if (chaletsMap[code]) openUnitEditor(code);
+                }, 250);
+            } catch (err) {
+                console.error('Add chalet error:', err);
+                showToast('حدث خطأ أثناء إنشاء الشاليه', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'إنشاء الشاليه وحفظه في السحابة';
+            }
+        }
+
+        function confirmDeleteSelectedUnit() {
+            if (!selectedAdminUnitCode) return;
+            const codeToDelete = selectedAdminUnitCode;
+
+            openConfirmModal(
+                `حذف الشاليه ${codeToDelete}`,
+                `هل أنت متأكد من حذف ملف الشاليه (${codeToDelete}) نهائياً من قاعدة البيانات؟`,
+                async () => {
+                    try {
+                        await deleteDoc(doc(chaletsCol, codeToDelete));
+                        selectedAdminUnitCode = null;
+                        showAdminView('empty');
+                        showToast(`تم حذف الشاليه ${codeToDelete}`);
+                    } catch (err) {
+                        console.error('Delete chalet error:', err);
+                        showToast('تعذر حذف الشاليه', 'error');
+                    }
+                }
+            );
+        }
+
+        /* =========================================================================
+           11. إدارة طلبات المعاينة وتحويلها لشاليه قيد التشطيب
+           ========================================================================= */
+        function renderAdminInquiriesList() {
+            const container = document.getElementById('adminInquiriesList');
+            const newCount = requestsList.filter(i => (i.status || 'جديد') === 'جديد').length;
+            document.getElementById('adminInquiriesCount').textContent = newCount > 0 ? `${newCount} جديد` : requestsList.length;
+
+            container.innerHTML = '';
+
+            if (requestsList.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white border border-warmBorder rounded-2xl p-10 text-center text-slateMid/70">
+                        <p class="text-sm font-bold">لا توجد طلبات معاينة واردة حتى الآن.</p>
+                        <p class="text-xs mt-1">أي طلب يتم إرساله من الحاسبة سيظهر هنا فوراً.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            requestsList.forEach((inq) => {
+                const status = inq.status || 'جديد';
+                const statusColors = {
+                    'جديد': 'bg-amber-50 text-amber-700 border-amber-200',
+                    'تم التواصل': 'bg-blue-50 text-blue-700 border-blue-200',
+                    'تم التحويل': 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                };
+
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-warmBorder rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col gap-3.5';
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div class="space-y-1.5">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-sm font-extrabold text-slateDark">${escapeHtml(inq.clientName)}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${statusColors[status] || statusColors['جديد']}">${escapeHtml(status)}</span>
+                                <span class="text-[11px] text-slateMid/60">${formatArabicDate(inq.createdAt)}</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2.5 text-xs font-semibold text-slateMid">
+                                <a href="tel:${escapeHtml(inq.phone)}" dir="ltr" class="text-bronzeDark hover:underline font-bold">${escapeHtml(inq.phone)}</a>
+                                ${inq.clientEmail ? `<span>•</span><span dir="ltr" class="text-slateMid/80">${escapeHtml(inq.clientEmail)}</span>` : ''}
+                                <span>•</span>
+                                <span class="font-extrabold text-slateDark">شاليه ${escapeHtml(inq.area)} م²</span>
+                                <span>•</span>
+                                <span>${escapeHtml(inq.packageName)}</span>
+                                ${inq.price ? `<span>•</span><span class="font-extrabold text-emerald-700">${formatEGP(inq.price)} ج.م</span>` : ''}
+                            </div>
+                            <div class="text-xs font-semibold text-slateMid/85">القرية / المنتجع: ${escapeHtml(inq.village || 'غير محدد')}</div>
+                            ${inq.notes ? `<p class="text-xs text-slateMid/75">${escapeHtml(inq.notes)}</p>` : ''}
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <select data-status-select class="px-3 py-2 rounded-xl text-xs font-bold bg-warmBg border border-warmBorder focus:border-bronze focus:outline-none text-slateDark">
+                                <option value="جديد" ${status === 'جديد' ? 'selected' : ''}>جديد</option>
+                                <option value="تم التواصل" ${status === 'تم التواصل' ? 'selected' : ''}>تم التواصل</option>
+                                <option value="تم التحويل" ${status === 'تم التحويل' ? 'selected' : ''}>تم التحويل</option>
+                            </select>
+
+                            <button type="button" data-convert-inq class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-bronze hover:bg-bronzeDark text-white transition shadow-sm">
+                                تحويل لشاليه قيد التشطيب
+                            </button>
+
+                            <button type="button" data-del-inq aria-label="حذف الطلب" class="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                card.querySelector('[data-status-select]').addEventListener('change', async (e) => {
+                    const nextStatus = e.target.value;
+                    try {
+                        await updateDoc(doc(requestsCol, inq.id), { status: nextStatus });
+                        showToast(`تم تحديث حالة الطلب إلى "${nextStatus}"`);
+                    } catch (err) {
+                        console.error(err);
+                        showToast('تعذر تحديث حالة الطلب', 'error');
+                    }
+                });
+
+                card.querySelector('[data-convert-inq]').addEventListener('click', async () => {
+                    const newCode = suggestNextUnitCode();
+                    try {
+                        await setDoc(doc(chaletsCol, newCode), {
+                            code: newCode,
+                            ownerName: inq.clientName || 'عميل جديد',
+                            ownerEmail: (inq.clientEmail || '').toLowerCase(),
+                            village: inq.village || 'قيد التحديد',
+                            area: Number(inq.area) || 60,
+                            packageName: inq.packageName || 'باقة سوبر لوكس',
+                            notes: inq.notes || '',
+                            stages: STAGE_NAMES.map(name => ({ name, percent: 0 })),
+                            updates: [{ date: formatArabicDate(Date.now()), text: 'تم التعاقد وفتح ملف الشاليه للبدء في أعمال التشطيب.' }],
+                            updatedAt: Date.now()
+                        });
+                        await updateDoc(doc(requestsCol, inq.id), { status: 'تم التحويل' });
+                        showToast(`تم تحويل الطلب إلى الشاليه ${newCode} بنجاح`);
+                        switchAdminTab('units');
+                        selectedAdminUnitCode = newCode;
+                        setTimeout(() => {
+                            if (chaletsMap[newCode]) openUnitEditor(newCode);
+                        }, 250);
+                    } catch (err) {
+                        console.error(err);
+                        showToast('تعذر تحويل الطلب حالياً', 'error');
+                    }
+                });
+
+                card.querySelector('[data-del-inq]').addEventListener('click', () => {
+                    openConfirmModal(
+                        'حذف طلب المعاينة',
+                        `هل أنت متأكد من حذف طلب العميل "${inq.clientName}"؟`,
+                        async () => {
+                            try {
+                                await deleteDoc(doc(requestsCol, inq.id));
+                                showToast('تم حذف الطلب بنجاح');
+                            } catch (err) {
+                                console.error(err);
+                                showToast('تعذر حذف الطلب', 'error');
+                            }
+                        }
+                    );
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================================
+           12. ربط الأحداث وتشغيل التطبيق فوراً
+           ========================================================================= */
+        function bindEvents() {
+            // قائمة الموبايل
+            const mobileMenu = document.getElementById('mobileMenu');
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+            document.getElementById('mobileBookBtn').addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                openBookingModal();
+            });
+
+            // إعادة محاولة الاتصال بـ Firestore
+            document.getElementById('retryFirestoreBtn').addEventListener('click', startCloudSync);
+
+            // حساب العميل وبوابة شاليهاتي
+            document.getElementById('openClientAuthBtn').addEventListener('click', () => openClientAuthModal('login'));
+            document.getElementById('closeClientAuthBtn').addEventListener('click', closeClientAuthModal);
+            document.getElementById('authTabLoginBtn').addEventListener('click', () => switchClientAuthTab('login'));
+            document.getElementById('authTabRegisterBtn').addEventListener('click', () => switchClientAuthTab('register'));
+            document.getElementById('clientLoginForm').addEventListener('submit', handleClientLogin);
+            document.getElementById('clientRegisterForm').addEventListener('submit', handleClientRegister);
+            document.getElementById('clientLogoutBtn').addEventListener('click', handleClientLogout);
+            document.getElementById('openClientPortalBtn').addEventListener('click', openClientPortal);
+            document.getElementById('openPortalFromTrackerBtn').addEventListener('click', openClientPortal);
+            document.getElementById('closeClientPortalBtn').addEventListener('click', () => {
+                document.getElementById('clientPortalModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+            document.getElementById('toggleClientAddChaletBtn').addEventListener('click', () => {
+                const form = document.getElementById('clientChaletForm');
+                document.getElementById('clientChaletFormTitle').textContent = 'إضافة شاليه جديد لحسابك';
+                document.getElementById('clientEditModeCode').value = '';
+                form.reset();
+                const codeInput = document.getElementById('clientChaletCode');
+                codeInput.readOnly = false;
+                codeInput.value = suggestNextUnitCode();
+                document.getElementById('clientChaletOwnerName').value = getCurrentUserDisplayName();
+                form.classList.toggle('hidden');
+            });
+            document.getElementById('cancelClientChaletFormBtn').addEventListener('click', () => {
+                document.getElementById('clientChaletForm').classList.add('hidden');
+            });
+            document.getElementById('clientChaletForm').addEventListener('submit', handleClientSaveChalet);
+
+            // نافذة الحجز
+            document.getElementById('bookingAreaSelect').addEventListener('change', updateBookingModalPrice);
+            document.getElementById('bookingPackageSelect').addEventListener('change', updateBookingModalPrice);
+            document.getElementById('calcBookBtn').addEventListener('click', openBookingModal);
+            document.getElementById('closeBookingModalBtn').addEventListener('click', closeBookingModal);
+            document.getElementById('closeBookingSuccessBtn').addEventListener('click', closeBookingModal);
+            document.getElementById('bookingForm').addEventListener('submit', handleBookingSubmit);
+            document.getElementById('bookingModal').addEventListener('click', (e) => {
+                if (e.target.id === 'bookingModal') closeBookingModal();
+            });
+
+            // البحث عن الشاليه
+            document.getElementById('unitSearchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                selectUnitForClient(document.getElementById('unitCodeInput').value);
+            });
+
+            // لوحة الإدارة
+            document.getElementById('openAdminBtn').addEventListener('click', openAdminOverlay);
+            document.getElementById('closeAdminLoginBtn').addEventListener('click', closeAdminOverlay);
+            document.getElementById('closeAdminPanelBtn').addEventListener('click', closeAdminOverlay);
+            document.getElementById('adminModePinBtn').addEventListener('click', () => switchAdminLoginMode('pin'));
+            document.getElementById('adminModeEmailBtn').addEventListener('click', () => switchAdminLoginMode('email'));
+
+            document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = false;
+                if (adminLoginMode === 'pin') {
+                    isValid = document.getElementById('adminPasscodeInput').value.trim() === ADMIN_CREDENTIALS.pin;
+                } else {
+                    const enteredEmail = document.getElementById('adminEmailInput').value.trim().toLowerCase();
+                    const enteredPass = document.getElementById('adminPasswordInput').value;
+                    isValid = (enteredEmail === ADMIN_CREDENTIALS.email && enteredPass === ADMIN_CREDENTIALS.password);
+                }
+
+                if (isValid) {
+                    isAdminAuthenticated = true;
+                    document.getElementById('adminLoginError').classList.add('hidden');
+                    document.getElementById('adminLoginCard').classList.add('hidden');
+                    document.getElementById('adminDashboardPanel').classList.remove('hidden');
+                    renderAdminUnitsList();
+                    renderAdminInquiriesList();
+                    updateCloudStatusUI(cloudState);
+                    const firstCode = Object.keys(chaletsMap).sort()[0];
+                    if (firstCode) openUnitEditor(firstCode);
+                    else showAdminView('empty');
+                    showToast('تم تسجيل الدخول إلى لوحة الإدارة بنجاح');
+                } else {
+                    document.getElementById('adminLoginError').classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+                isAdminAuthenticated = false;
+                selectedAdminUnitCode = null;
+                closeAdminOverlay();
+                showToast('تم تسجيل الخروج من لوحة الإدارة');
+            });
+
+            document.getElementById('tabUnitsBtn').addEventListener('click', () => switchAdminTab('units'));
+            document.getElementById('tabInquiriesBtn').addEventListener('click', () => switchAdminTab('inquiries'));
+            document.getElementById('tabCloudBtn').addEventListener('click', () => {
+                updateCloudStatusUI(cloudState);
+                switchAdminTab('cloud');
+            });
+
+            document.getElementById('showAddUnitFormBtn').addEventListener('click', () => {
+                selectedAdminUnitCode = null;
+                renderAdminUnitsList();
+                document.getElementById('newUnitCode').value = suggestNextUnitCode();
+                showAdminView('add');
+            });
+
+            document.getElementById('cancelAddUnitBtn').addEventListener('click', () => showAdminView('empty'));
+            document.getElementById('addUnitForm').addEventListener('submit', handleAddNewUnit);
+            document.getElementById('saveUnitChangesBtn').addEventListener('click', handleSaveUnitChanges);
+            document.getElementById('deleteSelectedUnitBtn').addEventListener('click', confirmDeleteSelectedUnit);
+            document.getElementById('reseedDemoBtn').addEventListener('click', () => seedDemoChalets(true));
+
+            // نافذة التأكيد المخصصة
+            document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirmModal);
+            document.getElementById('confirmOkBtn').addEventListener('click', async () => {
+                const action = pendingConfirmAction;
+                closeConfirmModal();
+                if (typeof action === 'function') await action();
+            });
+        }
+
+        // التشغيل الفوري
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChaletAreas();
+            renderPackages();
+            updateCalculatorSummary();
+            bindEvents();
+            startCloudSync();
+        });
+    </script>
+</body>
+</html>
